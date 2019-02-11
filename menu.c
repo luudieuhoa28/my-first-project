@@ -18,3 +18,12 @@ void printNorMenu()
 	printf("3. Your account\n");
 	printf("4. Exit\n");
 }
+
+void printMainMenu()
+{
+	printf("1. Members\n");
+	printf("2. Event\n");
+	printf("3. Fund\n");
+	printf("4. Notification\n");
+	printf("5. Exit\n");
+}

@@ -568,10 +568,106 @@ void controlAcc(int numAcc, FILE* pAcc, int numStu)
 	system("cls");
 }
 
+void member(int* pNumStu, char username[], FILE* pAcc, int numAcc)
+{
+	system("cls");
+	int posi;// position is deleted;
+	
+	int choice;
+	if(decentralizeStu(username) == 1)
+	{
+		do
+		{
+			printSpeMenu();	
+			choice = getChoice(7);
+			system("cls");
+			switch (choice)
+			{
+				case 1: 
+					for(int i = 0; i <= *pNumStu - 1; i++)
+					{
+						printf("%d. ", i + 1);
+						printInfo(i);
+					}
+					break;
+				case 2:
+					searStu(*pNumStu);
+					break;
+				case 3:
+					InsertMem(pAcc, pNumStu);
+					system("cls");
+					printf("Add a member successfully!");
+					break;
+				case 4:
+					for(int i = 0; i <= *pNumStu - 1; i++)
+					{
+						printf("%d. ", i + 1);
+						printInfo(i);
+					}
+					printf("Enter member's order number you want to delete, ");
+					posi = getChoice(*pNumStu) - 1;
+					system("cls");
+					deleMem(pAcc, pNumStu, posi);
+					for(int i = 0; i <= *pNumStu - 1; i++)
+					{
+						printf("%d. ", i + 1);
+
+						printInfo(i);
+					}				
+					break;
+				case 5:
+					for(int i = 0; i <= *pNumStu - 1; i++)
+					{
+						printf("%d. ", i + 1);
+						printInfo(i);
+					}
+					printf("Enter member's order number you want to edit, ");
+					numAcc = getChoice(*pNumStu) - 1;
+					system("cls");
+					printInfo(numAcc);
+					editInfo(numAcc, pAcc, *pNumStu);
+					break;
+				case 6:
+					controlAcc(numAcc, pAcc, *pNumStu);
+					break;
+				case 7:
+					break;								
+			}	
+		} while(choice != 7);
+						
+	}else
+		{
+			system("cls");
+			do
+				{
+					printNorMenu();
+					choice = getChoice(4);
+					system("cls");
+					switch (choice)
+					{
+						case 1: 
+							for(int i = 0; i <= *pNumStu - 1; i++)
+							{
+								printf("%d. ", i + 1);
+								printInfo(i);
+							}
+							break;
+						case 2:
+							searStu(*pNumStu);
+							break;
+						case 3:
+							controlAcc(numAcc, pAcc, *pNumStu);	
+							break;
+					}		
+				} while(choice != 4);
+		}	
+}
+
 int main(int argc, char *argv[]) {
 	char username[9];
 	char password[20];
 	
+	int numAcc;// position to get user account	
 
 	//read student information
 	FILE* pAcc;
@@ -579,12 +675,9 @@ int main(int argc, char *argv[]) {
 	pAcc = fopen("account.txt", "r");
 	
 	int numStu;
-	int posi;// position is deleted;
-	int numAcc;// position to get user account
-	//	numStu = getInfo(pAcc);
+
 	getInfo(pAcc, &numStu);
 	fclose(pAcc);
-	sortStuList(numStu);
 		
 	//check account and print menu
 	do{
@@ -595,103 +688,25 @@ int main(int argc, char *argv[]) {
 		{
 			system("cls");
 			int choice;
-			if(decentralizeStu(username) == 1)
+			//lay tu day
+			do
 			{
-				do
+				printMainMenu();
+				choice = getChoice(5);
+				switch (choice)
 				{
-					printSpeMenu();	
-					choice = getChoice(7);
-					system("cls");
-					switch (choice)
-					{
-						case 1: 
-							for(int i = 0; i <= numStu - 1; i++)
-							{
-								printf("%d. ", i + 1);
-								printInfo(i);
-							}
-							break;
-						case 2:
-							searStu(numStu);
-							break;
-						case 3:
-							InsertMem(pAcc, &numStu);
-							printf("%d\n", numStu);
-							system("cls");
-						//	sortStuList(numStu);
-							printf("Add a member successfully!");
-							break;
-						case 4:
-							for(int i = 0; i <= numStu - 1; i++)
-							{
-								printf("%d. ", i + 1);
-								printInfo(i);
-							}
-							printf("Enter member's order number you want to delete, ");
-							posi = getChoice(numStu) - 1;
-							system("cls");
-							deleMem(pAcc, &numStu, posi);
-							for(int i = 0; i <= numStu - 1; i++)
-							{
-								printf("%d. ", i + 1);
-
-								printInfo(i);
-							}				
-							break;
-						case 5:
-							for(int i = 0; i <= numStu - 1; i++)
-							{
-								printf("%d. ", i + 1);
-								printInfo(i);
-							}
-							printf("Enter member's order number you want to edit, ");
-							numAcc = getChoice(numStu) - 1;
-							system("cls");
-							printInfo(numAcc);
-							editInfo(numAcc, pAcc, numStu);
-							break;
-						case 6:
-							controlAcc(numAcc, pAcc, numStu);
-							break;
-						case 7:
-							break;								
-					}
-			//	system("cls");		
-				} while(choice != 7);
-						
-			}else
-			 	{
-			 		system("cls");
-			 		do
-					{
-						printNorMenu();
-						choice = getChoice(4);
-						system("cls");
-						switch (choice)
-						{
-							case 1: 
-								for(int i = 0; i <= numStu - 1; i++)
-								{
-									printf("%d. ", i + 1);
-									printInfo(i);
-								}
-								break;
-							case 2:
-								searStu(numStu);
-								break;
-							case 3:
-								controlAcc(numAcc, pAcc, numStu);	
-								
-						}		
-					} while(choice != 4);
+					case 1:
+						member(&numStu, username, pAcc,numAcc);
+						break;
 				}
+			}while (choice != 5);
 		}else 
 			{
-				//them lenh xoa man hinh
 				system("cls");
 				
 				printf("Account does not exist!\n");		
 			}
+		//toi day	
 	}while (!checkAcc(numStu, username, password, &numAcc));
 	
 
