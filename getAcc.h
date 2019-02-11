@@ -1,6 +1,5 @@
-// Get username
+//function get usename from user
 void getUsername(char username[]);
 
-// Get password
+//function get get password from user
 void getPassword(char password[]);
-
