@@ -2,4 +2,4 @@
 void getUsername(char username[]);
 
 //function get get password from user
-void getPassword(char password[]);
+void getPassword(char password[], char username[]);
