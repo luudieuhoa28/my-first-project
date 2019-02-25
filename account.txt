@@ -1,6 +1,6 @@
 SE101011 010 10 Nam Le Van Dat
-SE101010 010 10 Nam Who Am I
 SE100091 091 10 Nu Nguyen Thi Kim Oanh
+SE101010 010 10 Nam Who Am I nhguyr
 SE111122 122 11 Nam Nguyen Van Ca
 SE110100 100 11 Nam Truong Duy Khanh
 SE111112 111 11 Nam Nguyen Van Khanh
@@ -20,11 +20,12 @@ SE120888 888 12 Nam Tran Hoang Long
 SE120117 117 12 Nu Cao Thi Kim Ngan
 SE120118 118 12 Nu Nguyen Thi Thanh Ngan
 SE122323 323 12 Nam Nguyen Van Qua
+SE121213 213 12 Nu Nguyen Thi
 SE133232 232 13 Nam Tran Van An
 SE130120 120 13 Nam Truong Van An
 SE130121 121 13 Nu Phan Hue Anh
 SE130122 122 13 Nu Pham Duc Binh
-SE133333 333 13 Nam Nguyen Van C
+SE133333 333 13 Nam Nguyen Van Cho
 SE130111 111 13 Nu Nguyen Thi Giang
 SE130112 112 13 Nam Nguyen Van Giang
 SE130123 123 13 Nu Truong Le Song Giao

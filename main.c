@@ -21,6 +21,13 @@
 		char sex[4];
 		char name[50];
 	} student[100];
+
+//fuction color
+void printfGreen(char str[255]){
+	SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+	printf ("%s", str);
+  	SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
+}
 	
 //fuction uppercase name
 void upperCase(char str[])
@@ -31,7 +38,7 @@ void upperCase(char str[])
 	{
 		for (int i = 1; i <= strlen(str) - 2; i++)
 		{
-			if (str[i] == ' ') str[i + 1] = toupper(str[i + 1]);
+			if (str[i] == ' ' && str[i + 1] != ' ') str[i + 1] = toupper(str[i + 1]);
 		}
 	}
 }
@@ -530,6 +537,7 @@ void editMem(int numStu, int number, FILE* pAcc)
 									{
 										strcat(tmp, " ");
 									}
+									upperCase(tmp);
 									printf("\n\n\n\n\n\n\n\n");
 									printf("\t\t\t.---------------------------------------------------------------\n");
 									printf("\t\t\t| *%s|", tmp);
@@ -617,7 +625,9 @@ void editMem(int numStu, int number, FILE* pAcc)
 												if(posi == 1)
 												{											
 													tmpName[strlen(tmpName) + 1] = '\0';
-													tmpName[strlen(tmpName)] = temp;	
+													tmpName[strlen(tmpName)] = temp;
+												//	deleteOddSpace(tmpName);
+													upperCase(tmpName);	
 												}
 												if(posi == 3)
 												{
@@ -662,7 +672,7 @@ void editMem(int numStu, int number, FILE* pAcc)
 									getchar();
 								} else
 									{
-										
+										upperCase(student[number - 1].name);
 										strcpy(student[number - 1].name, tmpName);
 										strcpy(student[number - 1].sex, tmpSex);
 										strcpy(student[number - 1].studentCode, tmpCode);
@@ -970,6 +980,7 @@ void InsertMem(FILE* pAcc, int* pNumStu)
 			if ((tmp == 32) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
 			{
 				tmpName[i] = tmp;
+				upperCase(tmpName);
 				i++;
 			}
 			if(tmp == 8 && i >= 1)
@@ -1078,6 +1089,7 @@ void InsertMem(FILE* pAcc, int* pNumStu)
 	
 	if(tmp == 13)
 	{
+		upperCase(tmpName);
 		strcpy(student[*pNumStu].name, tmpName);
 		strcpy(student[*pNumStu].studentCode, tmpCode);
 		strcpy(student[*pNumStu].sex, tmpSex);
