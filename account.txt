@@ -23,7 +23,7 @@ SE122323 323 12 Nam Nguyen Van Qua
 SE133232 232 13 Nam Tran Van An
 SE130120 120 13 Nam Truong Van An
 SE130121 121 13 Nu Phan Hue Anh
-SE130122 122 13 Nam Pham Duc Binh
+SE130122 122 13 Nu Pham Duc Binh
 SE133333 333 13 Nam Nguyen Van C
 SE130111 111 13 Nu Nguyen Thi Giang
 SE130112 112 13 Nam Nguyen Van Giang

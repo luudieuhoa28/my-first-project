@@ -863,7 +863,7 @@ void searchStudent(int numStu)
 			i++;
 			upperCase(element);	
 		}
-		if (tmp == 8)
+		if (tmp == 8 && i >= 1)
 		{
 			i--;
 			element[i] = '\0';
