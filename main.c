@@ -1,19 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "getAcc.h"
-#include <string.h>
-#include "decentralize.h"
-#include "choice.h"
+#include <stdint.h>
 #include <windows.h>
-#include <stdlib.h>
-#include "menu.h"
 #include <ctype.h>
 #include <conio.h>
+#include "string.h"
+#include"print_menu.h"
+#include"print_logo.h"
+#include"gotoxy.h"
 
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+#include"decentralize.h"
+#include "choice.h"
+#include "getAcc.h"
+#include "menu.h"
 
-// Declare the student struct
-	struct students 
+char inputAddress[100] = "D:\\study\\train c\\classProject\\Nam\\member_Event_Attendant_Check\\";
+int numStu;
+char studentCurrentCode[9];
+char decentralization[20];
+//creat struct
+struct students 
 	{
 		char studentCode[9];
 		char pass[20];
@@ -21,15 +27,41 @@
 		char sex[4];
 		char name[50];
 	} student[100];
-
-//fuction color
-void printfGreen(char str[255]){
-	SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-	printf ("%s", str);
-  	SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
-}
 	
-//fuction uppercase name
+struct Event{
+	char idEvent[4];
+	char name[70];
+	char time[20];
+	char place[100];
+	char contents[255];	
+} event[100];
+
+struct FundBudget {
+	char idFund[4];
+	char time[20];
+	char contents[100];
+	int64_t amount;
+} fundBudget[100];
+
+struct MonthlyFund{
+	char time[20];
+	int64_t amount;
+}monthlyFund[100];
+
+struct EventAttendance {
+	int isRegistered;
+	int isAttended;
+	char MSSV[9];
+}eventAttendance[100];
+
+struct FundAtendance {	
+	char MSSV[8];
+	int isDone;
+}FundAtendance[100];
+
+
+//Hoa's function
+
 void upperCase(char str[])
 {
 
@@ -38,7 +70,7 @@ void upperCase(char str[])
 	{
 		for (int i = 1; i <= strlen(str) - 2; i++)
 		{
-			if (str[i] == ' ' && str[i + 1] != ' ') str[i + 1] = toupper(str[i + 1]);
+			if (str[i] == ' ') str[i + 1] = toupper(str[i + 1]);
 		}
 	}
 }
@@ -75,71 +107,6 @@ void writeFile(FILE* pAcc, int numStu)
 	fclose(pAcc);
 }
 
-//function delete odd space
-void deleteOddSpace(char str[])
-{	
-	while (str[0] == ' ') strcpy(&str[0], &str[1]);
-	
-	for (int i = 0; i <= strlen(str) - 1; i++)
-	{
-		if(str[i] == ' ' && str[i + 1] ==' ')
-		{
-			strcpy(&str[i], &str[i + 1]);
-			i--;
-		}
-	}
-	
-	while(str[strlen(str) - 1] == ' ') strcpy(&str[strlen(str) - 1], &str[strlen(str)]);
-}
-	
-void printInfo(int orderNum)
-{
-		char name[50];
-		strcpy(name, student[orderNum].name);
-		while (strlen(name) < 49)
-		{
-			strcat(name, " ");
-		}
-		printf("| %s|", name);
-		printf("    %s\t|", student[orderNum].sex);
-		printf("%10s  |",student[orderNum].studentCode);
-		printf("  K%d  |", student[orderNum].course);
-	
-		printf("\n");
-}
-
-//function read student information
-void getInfo(FILE* pAcc, int* pNumStu)
-{
-	*pNumStu = 0;
-	while (!feof(pAcc))
-	{
-		fscanf(pAcc, "%s", &student[*pNumStu].studentCode);
-		fflush(stdin);
-		
-		fscanf(pAcc, "%s", &student[*pNumStu].pass);
-		
-		fscanf(pAcc, "%d", &student[*pNumStu].course);
-		
-		fscanf(pAcc, "%s", &student[*pNumStu].sex);
-
-		fgets(student[*pNumStu].name, 50, pAcc);			
-		deleteOddSpace(student[*pNumStu].name);
-		
-		printf("\n");
-		(*pNumStu)++;
-	}
-		for(int i = 0; i <= *pNumStu - 1; i++)
-		{
-			if(i != (*pNumStu) - 1)
-			{
-				student[i].name[strlen(student[i].name) - 1] = '\0';			
-			}else student[i].name[strlen(student[i].name)] = '\0';
-		}
-
-}
-
-//function swap student position
 void swap(int firstPosi, int secondPosi)
 {
 	//swap student code
@@ -218,7 +185,7 @@ int compareString(char name1[], char name2[])
 
 
 //Sort student list
-void sortStuList(int numStu)
+void sortStuList(int numStu, int* pNumAcc)
 {
 	char tmpName1[50];
 	char tmpName2[50];
@@ -229,6 +196,13 @@ void sortStuList(int numStu)
 			if (student[j].course > student[j + 1].course)
 			{
 				swap(j, j + 1);
+				if(j + 1 == *pNumAcc)
+				{
+					*pNumAcc = j;
+				} else if(j == *pNumAcc)
+					{
+						*pNumAcc = j + 1;
+					}
 			} else if (student[j].course == student[j + 1].course)
 					{
 						strcpy(tmpName1, student[j].name);
@@ -236,66 +210,19 @@ void sortStuList(int numStu)
 						if (compareString(tmpName1, tmpName2) > 0)
 						{
 							swap(j, j + 1);
+							if(j + 1 == *pNumAcc)
+							{
+								*pNumAcc = j;
+							} else if(j == *pNumAcc)
+								{
+									*pNumAcc = j + 1;
+								}
 						}
 					}
 		}
 	}
 }
 
-//function print information by the table
-void printTable(int numStu)
-{
-
-	int startPosi = 0;
-	char letter;
-	int inputted = 1;
-	int page = 1;
-	do
-	{		
-		printf(":-------:--------------------------------------------------:------------:------------:-------:\n");
-		printf("|  Ord  |                      Name                        |    Sex     |Student Code| Course|\n");
-		printf("|-------:--------------------------------------------------:------------:------------:-------|\n");
-		int i = 0;
-		while(i <= 19 && (i + startPosi) <= numStu - 1)
-		{
-			printf("|  %d\t", i + startPosi + 1);
-			printInfo(i + startPosi);
-			i++;
-		}
-		printf(":-------:--------------------------------------------------:------------:------------:-------:\n");
-		printf("                                            <%d>\n", page);
-		printf("press [esc] to exit!");
-		
-		
-		
-		do
-		{
-			inputted = 0;
-			fflush(stdin);
-			letter = getch();
-		
-			if(letter == -32 || letter == 77 || letter == 75)
-			{
-			if((letter == 77) && startPosi < numStu - 21) 
-			{
-				startPosi += 20;
-				inputted = 1;
-				page++;
-			}else if((letter == 75) && startPosi >= 20) 
-			{
-
-				startPosi -= 20;
-				inputted = 1;
-				page--;
-			}
-		}
-			fflush(stdin);
-		} while(letter != 27 && !inputted);
-		system("cls");
-	} while(letter != 27);
-}
-
-//Function delete members
 void deleMem(FILE* pAcc, int* pNumStu, int posi)
 {
 	for(int i = posi; i <= *pNumStu - 2; i++)
@@ -461,24 +388,7 @@ void deleteInTable(int numStu, FILE* pAcc)
 		system("cls");
 	} while(letter != 27);
 }
-//function check account
-int checkAcc(int numStu, char username[], char password[], int* pNumAcc)
-{
-	for (int i = 0; i <= numStu - 1; i++)
-	{
-		if (strcmp(username, student[i].studentCode) == 0)
-		{		
-			if (strcmp(password, student[i].pass) == 0)
-			{
-				*pNumAcc = i;//to get position of user	
-				return 1;
-			}else return 0;
-		}
-	}
-	return 0;
-}
 
-//function check ID
 int checkID(char str[], int numStu, int numAcc)
 {
 	if(strlen(str) == 8)
@@ -506,7 +416,7 @@ int checkID(char str[], int numStu, int numAcc)
 }
 
 //function edit single member information
-void editMem(int numStu, int number, FILE* pAcc)
+void editMem(int numStu, int number, FILE* pAcc, int* pNumAcc)
 {
 		char temp;
 		char tmp[50];
@@ -533,51 +443,84 @@ void editMem(int numStu, int number, FILE* pAcc)
 								case 1:
 									system("cls");
 									strcpy(tmp, tmpName);
-									while (strlen(tmp) < 28)
+									while (strlen(tmp) < 48)
 									{
 										strcat(tmp, " ");
 									}
-									upperCase(tmp);
-									printf("\n\n\n\n\n\n\n\n");
-									printf("\t\t\t.---------------------------------------------------------------\n");
-									printf("\t\t\t| *%s|", tmp);
+									printf("\n%35.0s");
+									printfGreen("EDIT YOUR ACCOUT");
+									printf("\n");
+									printf(":--------------------------------------------------:------------:------------:\n");
+									printf("|                      Name                        |    Sex     |Student Code|\n");
+									printf(":--------------------------------------------------:------------:------------:\n");
+									printf(": ");
+									printfH(tmp);
+									printf(" : ");
 								//	deleteOddSpace(tmpName);
 									//printf("_");
-									printf("\t%s", tmpSex);
-									printf(" ^|v     |");
-									printf(" %s\t|\n", tmpCode);
-									printf("\t\t\t.---------------------------------------------------------------\n");						
+									printf(" %s", tmpSex);
+									gotoxy(59, 5);
+									printf(" ^|v ");
+									printf(": ");
+									printf("%s", tmpCode);
+									gotoxy(77, 5);
+									printf(":\n");
+									printf(":--------------------------------------------------:------------:------------:\n");
 									break;
 								case 2:
 									system("cls");
-									while (strlen(tmpName) < 28)
+									strcpy(tmp, tmpName);
+									while (strlen(tmp) < 48)
 									{
-										strcat(tmpName, " ");
+										strcat(tmp, " ");
 									}
-									printf("\n\n\n\n\n\n\n\n");
-									printf("\t\t\t.---------------------------------------------------------------\n");
-									printf("\t\t\t| %s|", tmpName);
-									deleteOddSpace(tmpName);
-									printf("\t\t*%s", tmpSex);
-									printf(" ^|v     |");
-									printf(" %s\t|\n", tmpCode);
-									printf("\t\t\t.---------------------------------------------------------------\n");						
+									printf("\n%35.0s");
+									printfGreen("EDIT YOUR ACCOUT");
+									printf("\n");
+									printf(":--------------------------------------------------:------------:------------:\n");
+									printf("|                      Name                        |    Sex     |Student Code|\n");
+									printf(":--------------------------------------------------:------------:------------:\n");
+									printf(": ");
+									printf(tmp);
+									printf(" : ");
+								//	deleteOddSpace(tmpName);
+									//printf("_");
+									printf(" %s", tmpSex);
+									gotoxy(59, 5);
+									printfH(" ^|v ");
+									printf(": ");
+									printf("%s", tmpCode);
+									gotoxy(77, 5);
+									printf(":\n");
+									printf(":--------------------------------------------------:------------:------------:\n");
 									break;
 								case 3:
 									system("cls");
-									while (strlen(tmpName) < 28)
+									strcpy(tmp, tmpName);
+									while (strlen(tmp) < 48)
 									{
-										strcat(tmpName, " ");
+										strcat(tmp, " ");
 									}
-									printf("\n\n\n\n\n\n\n\n");
-									printf("\t\t\t.---------------------------------------------------------------\n");
-									printf("\t\t\t| %s|", tmpName);
-									deleteOddSpace(tmpName);
-									printf("\t\t %s", tmpSex);
-									printf(" ^|v     |");
-									printf("*%s\t|\n", tmpCode);	
-									printf("\t\t\t.---------------------------------------------------------------\n");					
-									break;		
+									printf("\n%35.0s");
+									printfGreen("EDIT YOUR ACCOUT");
+									printf("\n");
+									printf(":--------------------------------------------------:------------:------------:\n");
+									printf("|                      Name                        |    Sex     |Student Code|\n");
+									printf(":--------------------------------------------------:------------:------------:\n");
+									printf(": ");
+									printf(tmp);
+									printf(" : ");
+								//	deleteOddSpace(tmpName);
+									//printf("_");
+									printf(" %s", tmpSex);
+									gotoxy(59, 5);
+									printf(" ^|v ");
+									printf(": ");
+									printfH(tmpCode);
+									gotoxy(77, 5);
+									printf(":\n");
+									printf(":--------------------------------------------------:------------:------------:\n");
+									break;
 								
 							}
 							temp = getch();
@@ -622,12 +565,10 @@ void editMem(int numStu, int number, FILE* pAcc)
 										{
 											if(temp == 32 || (temp >= 48 && temp <= 57) || (temp >= 65 && temp <= 90) || (temp >= 97 && temp <= 122))
 											{
-												if(posi == 1)
+												if(posi == 1 && (temp < 48 || temp > 57))
 												{											
 													tmpName[strlen(tmpName) + 1] = '\0';
-													tmpName[strlen(tmpName)] = temp;
-												//	deleteOddSpace(tmpName);
-													upperCase(tmpName);	
+													tmpName[strlen(tmpName)] = temp;	
 												}
 												if(posi == 3)
 												{
@@ -672,12 +613,12 @@ void editMem(int numStu, int number, FILE* pAcc)
 									getchar();
 								} else
 									{
-										upperCase(student[number - 1].name);
+										deleteOddSpace(tmpName);	
 										strcpy(student[number - 1].name, tmpName);
 										strcpy(student[number - 1].sex, tmpSex);
 										strcpy(student[number - 1].studentCode, tmpCode);
 										student[number - 1].course = getCourse((student[number - 1].studentCode));
-										sortStuList(numStu);
+										sortStuList(numStu, pNumAcc);
 										writeFile(pAcc, numStu);
 										break;
 							}
@@ -691,7 +632,7 @@ void editMem(int numStu, int number, FILE* pAcc)
 
 
 //function edit information in table
-void editInTable(int numStu, FILE* pAcc)
+void editInTable(int numStu, FILE* pAcc, int* pNumAcc)
 {
 	int number;
 	int startPosi = 0;
@@ -769,7 +710,7 @@ void editInTable(int numStu, FILE* pAcc)
 				number = atoi(tmp);		
 				if (letter == 13 && strlen(tmp) >= 1)
 				{
-					editMem(numStu, number, pAcc);					
+					editMem(numStu, number, pAcc, pNumAcc);					
 				}
 				if (letter == 8 && i > 0)
 				{
@@ -873,7 +814,7 @@ void searchStudent(int numStu)
 			i++;
 			upperCase(element);	
 		}
-		if (tmp == 8 && i >= 1)
+		if (tmp == 8 && i >= 1) 
 		{
 			i--;
 			element[i] = '\0';
@@ -947,7 +888,7 @@ void searchStudent(int numStu)
 
 
 //Function insert members
-void InsertMem(FILE* pAcc, int* pNumStu)
+void InsertMem(FILE* pAcc, int* pNumStu, int* pNumAcc)
 {
 	char tmp;
 	char tmpName[50];
@@ -980,7 +921,6 @@ void InsertMem(FILE* pAcc, int* pNumStu)
 			if ((tmp == 32) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
 			{
 				tmpName[i] = tmp;
-				upperCase(tmpName);
 				i++;
 			}
 			if(tmp == 8 && i >= 1)
@@ -1089,7 +1029,6 @@ void InsertMem(FILE* pAcc, int* pNumStu)
 	
 	if(tmp == 13)
 	{
-		upperCase(tmpName);
 		strcpy(student[*pNumStu].name, tmpName);
 		strcpy(student[*pNumStu].studentCode, tmpCode);
 		strcpy(student[*pNumStu].sex, tmpSex);
@@ -1109,7 +1048,7 @@ void InsertMem(FILE* pAcc, int* pNumStu)
 		printf("\t\t\t\t\t****************************************\n");
 		getchar();
 	(*pNumStu)++;
-	sortStuList(*pNumStu);
+	sortStuList(*pNumStu, pNumAcc);
 	
 	writeFile(pAcc, *pNumStu);
 	}
@@ -1202,7 +1141,7 @@ void changePass(int numAcc)
 					i++;
 				}
 			
-				if(tmp == 8)
+				if(tmp == 8 && i >= 1)
 				{
 					i--;
 					starFirstPass[i] = '\0';
@@ -1234,7 +1173,7 @@ void changePass(int numAcc)
 					i++;
 				}
 			
-				if(tmp == 8)
+				if(tmp == 8 && i >= 1)
 				{
 					i--;
 					starSecondPass[i] = '\0';
@@ -1295,85 +1234,40 @@ void changePass(int numAcc)
 
 
 //function cotrol account
-void controlAcc(int numAcc, FILE* pAcc, int numStu)
+void controlAcc(FILE* pAcc, int numStu, int* pNumAcc)
 {
-	printInfo(numAcc);
+	printInfo(*pNumAcc);
 	int choice;
 	char password[20];
 	do
 	{
-		printf("\n\n\n\n\n\n\n");
-		printf("\t\t\t\t\t.--------------------------------.\n");
-		printf("\t\t\t\t\t| 1. Edit your information       |\n");
-		printf("\t\t\t\t\t| 2. change your password        |\n");
-		printf("\t\t\t\t\t| 3. Exit                        |\n");
-		printf("\t\t\t\t\t.--------------------------------.\n");
-		choice = getChoice(3);
+		system("cls");
+		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+		printf("Hello, %s, your No. is %d\n", student[*pNumAcc].name, noStuCoSearch(studentCurrentCode) + 1); 
+		//noStuCoSearch(studentCurrentCode) is No. in DB
+		printf("Decentralization: [%s]", decentralization);
+		
+		gotoxy(0, 3);
+		printLogo();
+		printAccSettingMenu(&choice);
 		system("cls");
 	//	printInfo(numAcc);
 		switch (choice)
 		{
 			case 1:
 			//	editInfo(numAcc, pAcc, numStu);
-				editMem(numStu, numAcc + 1, pAcc);
-				printInfo(numAcc);
+				editMem(numStu, *pNumAcc + 1, pAcc, pNumAcc);
+				printInfo(*pNumAcc);
 				break;
 			case 2:
-				changePass(numAcc);
+				changePass(*pNumAcc);
 				break;
-//				printf("Enter your old password: ");
-//				scanf("%s", &password);
-//				if (strcmp(password, student[numAcc].pass) == 0)
-//				{
-//					printf("Enter your new password: ");
-//					scanf("%s", &student[numAcc].pass);
-//					system("cls");
-//					printInfo(numAcc);
-//					system("cls");
-//					printf("Change your password successfully!\n");	
-//					fflush(stdin);
-//					getchar();
-//					system("cls");
-//					printInfo(numAcc);
-//					writeFile(pAcc, numStu);
-//				} else
-//					{
-//						int stop = 1;
-//						while(strcmp(password, student[numAcc].pass) != 0)
-//						{
-//							printf("The password is not correct!\n");
-//							printf("Press 1 to continue!\n");
-//							printf("Press 0 to back!\n");
-//							
-//							scanf("%d", &stop);
-//							system("cls");
-//							printInfo(numAcc);
-//							if (stop == 0)
-//							{
-//								break;
-//							}
-//							printf("Enter password again: ");
-//							scanf("%s", &password);
-//						}
-//						if (stop != 0)
-//						
-//							printf("Enter your new password: ");
-//							scanf("%s", &student[numAcc].pass);
-//							system("cls");
-//							printInfo(numAcc);	
-//							printf("Change your password successfully!\n");	
-//							writeFile(pAcc, numStu);
-			
-//					}
-//				break;	
 		}
-//	system("cls");
-
 	}while (choice != 3);
 	system("cls");
 }
 
-void member(int* pNumStu, char username[], FILE* pAcc, int numAcc)
+void member(int* pNumStu, char username[], FILE* pAcc, int* pNumAcc)
 {
 	system("cls");
 	int posi;// position is deleted;
@@ -1383,8 +1277,16 @@ void member(int* pNumStu, char username[], FILE* pAcc, int numAcc)
 	{
 		do
 		{
-			printSpeMenu();	
-			choice = getChoice(7);
+//			printSpeMenu();	
+			system("cls");
+			SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+			printf("Hello, %s, your No. is %d\n", student[*pNumAcc].name, noStuCoSearch(studentCurrentCode) + 1); 
+			//noStuCoSearch(studentCurrentCode) is No. in DB
+			printf("Decentralization: [%s]", decentralization);
+			
+			gotoxy(0, 3);
+			printLogo();
+			printMemberMenuA(&choice);
 			system("cls");
 			switch (choice)
 			{
@@ -1395,16 +1297,16 @@ void member(int* pNumStu, char username[], FILE* pAcc, int numAcc)
 					searchStudent(*pNumStu);
 					break;
 				case 3:
-					InsertMem(pAcc, pNumStu);
+					InsertMem(pAcc, pNumStu, pNumAcc);
 					break;
 				case 4:
 					deleteInTable(*pNumStu, pAcc);
 					break;
 				case 5:
-					editInTable(*pNumStu, pAcc);
+					editInTable(*pNumStu, pAcc, pNumAcc);
 					break;
 				case 6:
-					controlAcc(numAcc, pAcc, *pNumStu);
+					controlAcc(pAcc, *pNumStu, pNumAcc);
 					break;
 				case 7:
 					break;									
@@ -1417,8 +1319,16 @@ void member(int* pNumStu, char username[], FILE* pAcc, int numAcc)
 			system("cls");
 			do
 				{
-					printNorMenu();
-					choice = getChoice(4);
+//					printNorMenu();
+					system("cls");
+					SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+					printf("Hello, %s, your No. is %d\n", student[*pNumAcc].name, noStuCoSearch(studentCurrentCode) + 1); 
+					//noStuCoSearch(studentCurrentCode) is No. in DB
+					printf("Decentralization: [%s]", decentralization);
+					
+					gotoxy(0, 3);
+					printLogo();
+					printMemberMenuM(&choice);
 					system("cls");
 					switch (choice)
 					{
@@ -1429,65 +1339,1131 @@ void member(int* pNumStu, char username[], FILE* pAcc, int numAcc)
 							searchStudent(*pNumStu);
 							break;
 						case 3:
-							controlAcc(numAcc, pAcc, *pNumStu);	
+							controlAcc(pAcc, *pNumStu, pNumAcc);	
 							break;
 					}
 				} while(choice != 4);
 		}
 }
 
-int main(int argc, char *argv[]) {
+
+//function print information by the table
+
+void printTable(int numStu)
+{
+	system("cls");
+	int startPosi = 0;
+	char letter;
+	int inputted = 1;
+	int page = 1;
+	do
+	{		
+		printf(":-------:--------------------------------------------------:------------:------------:-------:\n");
+		printf("|  Ord  |                      Name                        |    Sex     |Student Code| Course|\n");
+		printf("|-------:--------------------------------------------------:------------:------------:-------|\n");
+		int i = 0;
+		while(i <= 19 && (i + startPosi) <= numStu - 1)
+		{
+			printf("|  %d\t", i + startPosi + 1);
+			printInfo(i + startPosi);
+			i++;
+		}
+		printf(":-------:--------------------------------------------------:------------:------------:-------:\n");
+		printf("                                            <%d>\n", page);
+		printf("press [esc] to exit!");
+		
+		
+		
+		do
+		{
+			inputted = 0;
+			fflush(stdin);
+			letter = getch();
+		
+			if(letter == -32 || letter == 77 || letter == 75)
+			{
+			if((letter == 77) && startPosi < numStu - 21) 
+			{
+				startPosi += 20;
+				inputted = 1;
+				page++;
+				//	system("cls");
+			}else if((letter == 75) && startPosi >= 20) 
+			{
+
+				startPosi -= 20;
+				inputted = 1;
+				page--;
+				//	system("cls");
+			}
+		}
+			fflush(stdin);
+		} while(letter != 27 && !inputted);
+		system("cls");
+	} while(letter != 27);
+}
+
+void deleteOddSpace(char str[])
+{	
+	while (str[0] == ' ') strcpy(&str[0], &str[1]);
+	
+	for (int i = 0; i <= strlen(str) - 1; i++)
+	{
+		if(str[i] == ' ' && str[i + 1] ==' ')
+		{
+			strcpy(&str[i], &str[i + 1]);
+			i--;
+		}
+	}
+	
+	while(str[strlen(str) - 1] == ' ') strcpy(&str[strlen(str) - 1], &str[strlen(str)]);
+}
+	
+void printInfo(int orderNum)
+{
+		char name[50];
+		strcpy(name, student[orderNum].name);
+		while (strlen(name) < 49)
+		{
+			strcat(name, " ");
+		}
+		printf("| %s|", name);
+		printf("    %s\t|", student[orderNum].sex);
+		printf("%10s  |",student[orderNum].studentCode);
+		printf("  K%d  |", student[orderNum].course);
+	
+		printf("\n");
+}
+void getInfo(FILE* pAcc, int* pNumStu)
+{
+	*pNumStu = 0;
+	while (!feof(pAcc))
+	{
+		fscanf(pAcc, "%s", &student[*pNumStu].studentCode);
+		fflush(stdin);
+		
+		fscanf(pAcc, "%s", &student[*pNumStu].pass);
+		
+		fscanf(pAcc, "%d", &student[*pNumStu].course);
+		
+		fscanf(pAcc, "%s", &student[*pNumStu].sex);
+
+		fgets(student[*pNumStu].name, 50, pAcc);			
+		deleteOddSpace(student[*pNumStu].name);
+		
+		printf("\n");
+		(*pNumStu)++;
+	}
+		for(int i = 0; i <= *pNumStu - 1; i++)
+		{
+			if(i != (*pNumStu) - 1)
+			{
+				student[i].name[strlen(student[i].name) - 1] = '\0';			
+			}else student[i].name[strlen(student[i].name)] = '\0';
+		}
+}
+
+//function check account
+int checkAcc(int numStu, char username[], char password[], int* pNumAcc)
+{
+	for (int i = 0; i <= numStu - 1; i++)
+	{
+		if (strcmp(username, student[i].studentCode) == 0)
+		{		
+			if (strcmp(password, student[i].pass) == 0)
+			{
+				*pNumAcc = i;//to get position of user	
+				return 1;
+			}else return 0;
+		}
+	}
+	return 0;
+}
+
+//get number
+void announcementA(){
+	char str[255] = "";
+	int chooseNum;
+	do{
+		system("cls");
+		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
+		printf("Decentralization: [%s]", decentralization);
+		gotoxy(0, 3);
+		printLogo();
+		
+		printAnnouncementMenuA(&chooseNum);
+		
+		switch  (chooseNum) {
+			case 1:{
+				FILE *pFileAnn;
+				pFileAnn = fopen("announcement.txt", "r");	
+				
+				//print header
+				SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+				printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
+				printf("Decentralization: [%s]", decentralization);
+				gotoxy(0, 3);
+				printLogo();
+				
+				gotoxy(30, 12);
+				printfGreen("Announcment from Administator\n\n");
+				
+				while (!feof(pFileAnn)) {
+					fflush(stdin);
+					fgets(str, 255, pFileAnn);
+					if (str[strlen(str) - 1] == 10) 
+						str[strlen(str) - 1] = 0;
+					printf("%30.0s");
+					printfGreen("|   ");
+					puts(str);
+				}
+				fclose(pFileAnn);
+				system("pause");
+				break;
+			}
+			
+			case 2:{
+				FILE *pFileAnn;
+				pFileAnn = fopen("announcement.txt", "w");
+				
+				//print header
+				SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+				printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
+				printf("Decentralization: [%s]", decentralization);
+				gotoxy(0, 3);
+				printLogo();
+				
+				gotoxy(30, 12);
+				printfGreen("Input announcement contents: \n");
+				fflush(stdin);
+				
+				//Input text
+				int letter;
+				int prevousLine = 14;
+				do {
+					gotoxy(0, prevousLine);
+					printf("%30.0s");
+					printfGreen("|   ");
+					gets(str);
+					fputs(str, pFileAnn);
+//					fputs("\n", pFileAnn);
+					prevousLine++;
+					
+					gotoxy(0, 24);
+					printfGreen("Press [enter] to comtinue\n[Esc] to finish Process\n");
+					letter = getch();
+					if (letter == 13) fputs("\n", pFileAnn);
+				} while (letter != 27);
+				
+				fclose(pFileAnn);
+				break;
+			}
+			
+			case 3:{
+				break;
+			}
+		}
+	}while (chooseNum !=3);
+}
+
+void announcementM(){
+	char str[255] = "";
+	int chooseNum;
+	
+	do{
+		system("cls");
+		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
+		printf("Decentralization: [%s]", decentralization);
+		gotoxy(0, 3);
+		printLogo();
+		
+		printAnnouncementMenuM(&chooseNum);
+		
+		switch  (chooseNum) {
+			case 1:{
+				FILE *pFileAnn;
+				pFileAnn = fopen("announcement.txt", "r");	
+				
+				//print header
+				SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+				printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
+				printf("Decentralization: [%s]", decentralization);
+				gotoxy(0, 3);
+				printLogo();
+				
+				gotoxy(30, 12);
+				printfGreen("Announcment from Administator\n\n");
+				
+				while (!feof(pFileAnn)) {
+					fflush(stdin);
+					fgets(str, 255, pFileAnn);
+					if (str[strlen(str) - 1] == 10) 
+						str[strlen(str) - 1] = 0;
+					printf("%30.0s");
+					printfGreen("|   ");
+					puts(str);
+				}
+				
+				fclose(pFileAnn);
+				getch();
+				fflush(stdin);
+				break;
+			}
+			case 2:{
+				break;
+			}
+		
+		}
+	}while (chooseNum !=2);
+}
+
+int getnum(){
+	int num;
+	fflush(stdin);
+	scanf("%d", &num);
+	return(num);
+	}
+
+//Format value function
+int64_t valueOfStrNum(char str[]){
+	int i, offset;
+	int64_t result = 0;
+	
+	if (str[0] == '+' || str[0] == '-')
+		offset = 1;
+	else offset = 0;
+	
+	for (i = offset; i < strlen(str); i++ ){
+		result = result * 10 + str[i] - '0';
+	}
+	
+	if (str[0] == '-') {
+		result = - result;
+	}
+	return(result);
+}
+
+int noStuCoSearch(char studentCurrentCode[]){
+	int i = 0;
+	int flag = 1;
+	while (i<= numStu - 1 && flag == 1) {
+		if (strcmp(studentCurrentCode, student[i].studentCode) == 0){
+			flag = 0;
+		}
+		i++;
+	}
+	if (flag == 1) return(-1);
+	else return(i - 1);
+}
+
+// 2.1
+void printRegisteredList(int *pNumEvent){
+	system("cls");
+	int startPosi = 0;
+	char letter;
+	int inputted;
+	int page = 1;
+	do
+	{	
+		gotoxy(0, 5);
+		printf("%60.0s");
+		printfGreen("Registered & attendant list\n");
+		printf("%24.0s:-------:---------------------------------------------:-----------------:------------:------------:\n");
+		printf("%24.0s|  Ord  |                   Name                      |       MSSV      | Registered |  Attended  |\n");
+		printf("%24.0s|-------:---------------------------------------------:-----------------:------------:------------|\n");
+		int i = 0;
+		while(i <= 19 && (i + startPosi) <= numStu - 1)
+		{
+			printf("%24.0s");
+			printf("|  %d\t", i + startPosi + 1);
+			printRegisteredInfo(i + startPosi);
+			i++;
+		}
+		printf("%24.0s:-------:---------------------------------------------:-----------------:------------:------------:\n");
+		printf("%24.0s");
+		printf("                                        <%d>\n", page);
+		gotoxy(0, 32);
+		printfGreen("Press [esc] to exit!");
+		
+		
+		
+		do
+		{
+			inputted = 0;
+			fflush(stdin);
+			letter = getch();
+		
+			if(letter == -32 || letter == 77 || letter == 75)
+			{
+			if((letter == 77) && startPosi < numStu - 21) 
+			{
+				startPosi += 20;
+				inputted = 1;
+				page++;
+				//	system("cls");
+			}else if((letter == 75) && startPosi >= 20) 
+			{
+
+				startPosi -= 20;
+				inputted = 1;
+				page--;
+				//	system("cls");
+			}
+		}
+			fflush(stdin);
+		} while(letter != 27 && !inputted);
+		system("cls");
+	} while(letter != 27);
+}
+
+void printRegisteredInfo(int orderNum)
+{
+		char name[50];
+		strcpy(name, student[orderNum].name);
+		while (strlen(name) < 43)
+		{
+			strcat(name, " ");
+		}
+		printf("|  %s", name);
+		printf("|     %s    |", eventAttendance[orderNum].MSSV);
+		if (eventAttendance[orderNum].isRegistered == 0) 
+			printf("            |");
+		else printf("     X      |");
+		if (eventAttendance[orderNum].isAttended == 0) 
+			printf("            |");
+		else printf("     X      |");	
+//		printf("     %d      |", eventAttendance[orderNum].isRegistered);
+//		printf("     %d      |",eventAttendance[orderNum].isAttended);	
+		printf("\n");
+}
+
+void printEventList(int* pNumEvent){
+//	system("cls");
+	int numEvent = *pNumEvent;
+	int startPosi = 0;
+	char letter;
+	int inputted;
+	int page = 1;
+	do
+	{	
+		system("cls");
+		gotoxy(0, 5);
+		printf("%75.0s");
+		printfGreen(" Event list\n");
+		printf(":-------:--------------------------------------------:--------------:----------------------:--------------------------------------------------------------------------------------------------:\n");
+		printf("|   Id  |                     Name                   |     Time     |       Place          |                                                 Contents                                         |\n");
+		printf(":-------:--------------------------------------------:--------------:----------------------:--------------------------------------------------------------------------------------------------:\n");
+		int i = 1;
+		while(i <= 7 && (i + startPosi) <= numEvent)
+		{
+//			printf("|  %d\t", i + startPosi);
+			printEventInfo(i + startPosi - 1);
+			i++;
+		}
+//		printf(":-------:--------------------------------------------:--------------:----------------------:--------------------------------------------------------------------------------------------------:\n");
+		printf("                                                                                <%d>\n", page);
+		gotoxy(0,40);
+		printfGreen("Press [esc] to exit!");
+		
+		
+		
+		do
+		{
+			inputted = 0;
+			fflush(stdin);
+			letter = getch();
+		
+			if(letter == -32 || letter == 77 || letter == 75)
+			{
+			if((letter == 77) && startPosi + 7 < numEvent) 
+			{
+				startPosi += 7;
+				inputted = 1;
+				page++;
+				//	system("cls");
+			}else if((letter == 75) && startPosi >= 7) 
+			{
+
+				startPosi -= 7;
+				inputted = 1;
+				page--;
+				//	system("cls");
+			}
+		}
+			fflush(stdin);
+		} while(letter != 27 && !inputted);
+//		system("cls");
+	} while(letter != 27);
+}
+
+void printEventInfo(int orderNum){
+		int i = orderNum;
+		printf("|  %s  ", event[i].idEvent);
+		printf("| %s" ,event[i].name);
+		for(int j = 1;(j <= 43 - strlen(event[i].name)); j++) {
+			printf(" ");
+		}
+		printf("|  %s  ",event[i].time);
+		printf("| %s",event[i].place);
+		for(int j = 1;(j <= 21 - strlen(event[i].place)); j++) {
+			printf(" ");
+		}
+		if (strlen(event[i].contents) <= 93)
+		    printf("|    %s |\n", event[i].contents);
+		else{
+//			printf(": %0.93s... :\n", event[i].contents);
+			char str[255];
+			strcpy(str, event[i].contents);
+			printf("|    %0.93s |\n", str);
+			printf("|       |                                            |              |                      | ");
+			int j = 93;
+			while (j <= strlen(str)){
+				if (j % 96 == 93 && j > 96){
+				printf(" |\n");
+				printf("|       |                                            |              |                      | ");
+				}
+				printf("%c", str[j]);
+				j++;
+			}
+			
+			int spaceAdd = (96 - (strlen(str) - 92) % 96);
+			for (j = 0; j<= spaceAdd; j++ ) printf(" ");
+			printf("|\n");
+		}
+		printf(":-------:--------------------------------------------:--------------:----------------------:--------------------------------------------------------------------------------------------------:\n");
+}
+
+int isExist(char str[]){
+	FILE * pFile;
+	if((pFile = fopen(str,"r"))!=NULL) {
+        fclose(pFile);
+        return(1);
+    }
+    else{
+	   	return(0);
+        }
+}
+
+
+//main's function
+
+//Get input file
+void getMonthFundInfo(FILE* pFileMonthlyFund, int* pNumMonthly){
+	int i = 0;
+	while (!feof(pFileMonthlyFund)){
+		
+		fgets(monthlyFund[i].time, 255, pFileMonthlyFund);
+		monthlyFund[i].time[strlen(monthlyFund[i].time)-1] = 0;
+//		printf("time: %s\t", monthlyFund[i].time);
+		
+		char tmp[255];
+		fgets(tmp, 255, pFileMonthlyFund);
+		if (tmp[strlen(tmp)-1] == 10)
+			tmp[strlen(tmp)-1] = 0;
+		monthlyFund[i].amount = valueOfStrNum(tmp);
+//		printf("amount: %I64d\n", monthlyFund[i].amount);
+		i++;
+	}
+		*pNumMonthly = i - 1;
+}
+void getFundBudgetInfo(FILE* pFileStatistic, int* pNumStatistic){
+	int i = 0;
+	while (!feof(pFileStatistic)){
+		
+		fgets(fundBudget[i].idFund, 255, pFileStatistic);
+		fundBudget[i].idFund[strlen(fundBudget[i].idFund)-1] = 0;
+		
+		fgets(fundBudget[i].time, 255, pFileStatistic);
+		fundBudget[i].time[strlen(fundBudget[i].time)-1] = 0;
+		
+		fgets(fundBudget[i].contents, 255, pFileStatistic);
+		fundBudget[i].contents[strlen(fundBudget[i].contents)-1] = 0;
+		
+		char tmp[255];
+		fgets(tmp, 255, pFileStatistic);
+		if (tmp[strlen(tmp)-1] == 10)
+			tmp[strlen(tmp)-1] = 0;
+		fundBudget[i].amount = valueOfStrNum(tmp);	
+		
+		i++;
+	}
+		*pNumStatistic = i - 1;
+}
+
+void printFundStatisticList(int* pNumEvent){
+//	system("cls");
+	int numEvent = *pNumEvent;
+	int startPosi = 0;
+	char letter;
+	int inputted;
+	int page = 1;
+	do
+	{	
+		system("cls");
+		gotoxy(70, 5);
+		printfGreen("Fund budget List list\n\n");
+		printf("%20.0s:-------:--------------:------------------------------------------------------------------------------:-------------------:\n");
+		printf("%20.0s|   Id  |     Time     |                                                 Contents                     |        Amount     |\n");
+		printf("%20.0s:-------:--------------:------------------------------------------------------------------------------:-------------------:\n");
+		int i = 1;
+		while(i <= 10 && (i + startPosi) <= numEvent + 1)
+		{
+//			printf("|  %d\t", i + startPosi);
+			printf("%20.0s");
+			printFundStatisticInfo(i + startPosi - 1);
+			i++;
+		}
+		printf("%20.0s:-------:--------------:------------------------------------------------------------------------------:-------------------:\n");
+		printf("%20.0s");
+		printf("                                                         <%d>\n", page);
+		gotoxy(0,25);
+		printfGreen("Press [esc] to exit!");
+		
+		
+		
+		do
+		{
+			inputted = 0;
+			fflush(stdin);
+			letter = getch();
+		
+			if(letter == -32 || letter == 77 || letter == 75)
+			{
+			if((letter == 77) && startPosi + 10 < numEvent) 
+			{
+				startPosi += 10;
+				inputted = 1;
+				page++;
+				//	system("cls");
+			}else if((letter == 75) && startPosi >= 10) 
+			{
+
+				startPosi -= 10;
+				inputted = 1;
+				page--;
+				//	system("cls");
+			}
+		}
+			fflush(stdin);
+		} while(letter != 27 && !inputted);
+//		system("cls");
+	} while(letter != 27);
+}
+
+//
+void printFundStatisticInfo(int orderNum){
+	int i = orderNum;
+	printf("|  %s  ", fundBudget[i].idFund);
+	printf("|  %s  ",fundBudget[i].time);
+	printf("| %s",fundBudget[i].contents);
+	for(int j = 1;(j <= 77 - strlen(fundBudget[i].contents)); j++) {
+		printf(" ");
+	}
+	printf("|");
+	
+	int position = 0;
+	int64_t tmp = fundBudget[i].amount;
+	if (fundBudget[i].amount < 0 ) position = position + 1;
+	while (tmp / 10 != 0){
+		tmp = tmp / 10;
+		position++;
+	}
+	
+	gotoxy(140 - position, 10 + i);
+//	printf ("%d", position);
+	printf("%I64d", fundBudget[i].amount);
+	gotoxy(142, 10 + i);
+	printf("|\n");
+}
+		    
+//fund menu
+void fundMenuM(int* pNumMonthly, int* pNumStatistic){
+
+	//Print to screen
+	int chooseFundMenu;
+	FILE *pFileMonthlyFund;
+	pFileMonthlyFund = fopen("monthly_statistic.txt", "r");
+				
+	FILE *pFileStatistic;
+	pFileStatistic = fopen("fund_statistic.txt", "r");
+	do{
+		system("cls");
+		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
+		printf("Decentralization: [%s]", decentralization);
+		gotoxy(0, 3);
+		printLogo();
+		
+		printFundMenuM(&chooseFundMenu);
+		
+		//following num
+		switch (chooseFundMenu){
+			case 1:{
+				if (*pNumStatistic == 0) getFundBudgetInfo(pFileStatistic, pNumStatistic);
+				printFundStatisticList(pNumStatistic);
+//				system("pause");
+				break;
+			}
+			case 2:{
+				if (*pNumMonthly == 0) getMonthFundInfo(pFileMonthlyFund, pNumMonthly);
+				system("cls");
+				gotoxy(60, 5);
+				printfGreen("Monthly fund's available balances\n\n");
+				for (int i = 0; i <= *pNumMonthly; i++){
+					printf("%40.0s");
+					printf("Time: %s\t", monthlyFund[i].time);
+					printf("amount: %I64d\n\n", monthlyFund[i].amount);
+				}
+				system("pause");
+				break;
+			}
+			case 3:{
+				
+				//exit
+				fclose(pFileMonthlyFund);
+				fclose(pFileStatistic);
+				break;
+			}
+		}
+	}while (chooseFundMenu != 3);
+}
+
+//
+void getEventList(FILE* pFileEvent, int* pNumEvent) {
+int i = 0;
+		while (!feof(pFileEvent)){
+			
+			fgets(event[i].idEvent, 255, pFileEvent);
+			event[i].idEvent[strlen(event[i].idEvent)-1] = 0;
+			fflush(stdin);
+
+			fgets(event[i].name, 255, pFileEvent);
+			event[i].name[strlen(event[i].name)-1] = 0;
+			fflush(stdin);
+			
+			fgets(event[i].time, 255, pFileEvent);
+			event[i].time[strlen(event[i].time)-1] = 0;
+			fflush(stdin);
+
+			fgets(event[i].place, 255, pFileEvent);
+			event[i].place[strlen(event[i].place)-1] = 0;
+			fflush(stdin);
+			
+			fgets(event[i].contents, 255, pFileEvent);
+			if (event[i].contents[strlen(event[i].contents) - 1] == 10)
+				event[i].contents[strlen(event[i].contents) - 1] = 0;
+			fflush(stdin);
+			
+			i++;
+		}
+		*pNumEvent = i;
+//		system("pause");
+}
+
+//event menu
+void eventMenuAdmin(FILE* pFileEvent, int* pNumEvent){
+	
+	//Get input file
+	getEventList(pFileEvent, pNumEvent);
+	//Print to screen
+	int chooseEventMenu;
+	do{
+		system("cls");
+		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
+		printf("Decentralization: [%s]", decentralization);
+		gotoxy(0, 3);
+		printLogo();
+	
+		chooseEventMenuA(&chooseEventMenu);
+		
+		//following num
+		switch (chooseEventMenu){
+			case 1:{
+				// print event list
+				printEventList(pNumEvent);
+				break;
+			}
+			case 2:{
+				
+				//creat files's address
+				char address[100];
+//				printEventList(pNumEvent);
+				creatRegisterAddress(address);
+				printf("Confirm address: \"%s\"\n", address);
+				
+				//creat table if it hasn't existed
+				if (isExist(address) == 0) {
+					FILE* pFileCreat;
+					pFileCreat = fopen(address, "w");		
+					creatRegisterForm(pFileCreat);
+					fclose(pFileCreat);
+					printf("File has not existed\nCreating new list...\n");
+				}
+		
+				//get information from file
+				FILE* pFileRead;
+				pFileRead = fopen(address, "r");
+								
+				getRegistered(pFileRead);
+				fclose(pFileRead);
+				
+				//edit information from file
+				int num;
+				num = noStuCoSearch(studentCurrentCode);
+				eventAttendance[num].isRegistered = 1;	
+			
+			
+				printf(":---------------------------------------------:-----------------:------------:------------:\n");
+				printf("|                   Name                      |       MSSV      | Registered |  Attended  |\n");
+				printf(":---------------------------------------------:-----------------:------------:------------|\n");
+				printRegisteredInfo(num);
+				printf("'---------------------------------------------'-----------------'------------'------------'\n");
+				
+				//Write in file
+				FILE* pFileWrite;
+				pFileWrite = fopen(address, "w");
+				writeEAL(pFileWrite);
+				fclose(pFileWrite);
+				
+				printfGreen("Register success!\n");
+				system("pause");
+				
+				break;
+			}
+			case 3:{			
+				//reat files's address
+				char address[100];
+//				printEventList(pNumEvent);
+				creatRegisterAddress(address);
+				
+				//creat table if it hasn't existed
+				if (isExist(address) == 0) {
+					FILE* pFileCreat;
+					pFileCreat = fopen(address, "w");		
+					creatRegisterForm(pFileCreat);
+					fclose(pFileCreat);
+					printf("File has not existed\nCreating new list...\n");
+				}
+		
+				//get information from file
+				FILE* pFileRead;
+				pFileRead = fopen(address, "r");
+								
+				getRegistered(pFileRead);
+				fclose(pFileRead);
+				
+				printRegisteredList(&numStu);
+				break;
+			}
+			
+			case 4:{
+				//creat files's address
+				char address[100];
+				creatRegisterAddress(address);
+				printf("Confirm address: \"%s\"\n", address);
+				
+				//creat table if it hasn't existed
+				if (isExist(address) == 0) {
+					FILE* pFileCreat;
+					pFileCreat = fopen(address, "w");		
+					creatRegisterForm(pFileCreat);
+					fclose(pFileCreat);
+					printf("File has not existed\nCreating new list...\n");
+				}
+		
+				//get information from file
+				FILE* pFileRead;
+				pFileRead = fopen(address, "r");
+								
+				getRegistered(pFileRead);
+				fclose(pFileRead);
+				
+				//edit information from file
+				int num;
+				char studentCode[9];
+				do {
+					printf("Input student Code:");
+					fflush(stdin);
+					scanf("%s", studentCode);
+				}while (noStuCoSearch(studentCode) == -1) ;
+				
+				num = noStuCoSearch(studentCode);
+				eventAttendance[num].isAttended = 1;	
+			
+				printf(":---------------------------------------------:-----------------:------------:------------:\n");
+				printf("|                   Name                      |       MSSV      | Registered |  Attended  |\n");
+				printf(":---------------------------------------------:-----------------:------------:------------|\n");
+				printRegisteredInfo(num);
+				printf("'---------------------------------------------'-----------------'------------'------------'\n");
+				
+				//Write in file
+				FILE* pFileWrite;
+				pFileWrite = fopen(address, "w");
+				writeEAL(pFileWrite);
+				fclose(pFileWrite);
+				
+				printfGreen("Check attendant success!\n");
+				system("pause");
+				break;
+			}
+			case 5:{
+			}
+		
+		}
+	}while (chooseEventMenu != 5);
+}	
+
+void eventMenuM(FILE* pFileEvent, int* pNumEvent){
+	
+	//Get input file
+	getEventList(pFileEvent, pNumEvent);
+	//Print to screen
+	int chooseEventMenu;
+	do{
+		system("cls");
+		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
+		printf("Decentralization: [%s]", decentralization);
+		gotoxy(0, 3);
+		printLogo();
+		
+		chooseEventMenuM(&chooseEventMenu);
+		
+		//following num
+		switch (chooseEventMenu){
+			case 1:{
+				// print event list
+				printEventList(pNumEvent);
+				break;
+			}
+			case 2:{
+				
+				//creat files's address
+				char address[100];
+//				printEventList(pNumEvent);
+				creatRegisterAddress(address);
+				printf("Confirm address: \"%s\"\n", address);
+				
+				//creat table if it hasn't existed
+				if (isExist(address) == 0) {
+					FILE* pFileCreat;
+					pFileCreat = fopen(address, "w");		
+					creatRegisterForm(pFileCreat);
+					fclose(pFileCreat);
+					printf("File has not existed\nCreating new list...\n");
+				}
+		
+				//get information from file
+				FILE* pFileRead;
+				pFileRead = fopen(address, "r");
+								
+				getRegistered(pFileRead);
+				fclose(pFileRead);
+				
+				//edit information from file
+				int num;
+				num = noStuCoSearch(studentCurrentCode);
+				eventAttendance[num].isRegistered = 1;	
+			
+				printf(":---------------------------------------------:-----------------:------------:------------:\n");
+				printf("|                   Name                      |       MSSV      | Registered |  Attended  |\n");
+				printf(":---------------------------------------------:-----------------:------------:------------|\n");
+				printRegisteredInfo(num);
+				printf("'---------------------------------------------'-----------------'------------'------------'\n");
+				
+				//Write in file
+				FILE* pFileWrite;
+				pFileWrite = fopen(address, "w");
+				writeEAL(pFileWrite);
+				fclose(pFileWrite);
+				
+				printfGreen("Register success!\n");
+				system("pause");
+				
+				break;
+			}
+			case 3:{			
+				//reat files's address
+				char address[100];
+//				printEventList(pNumEvent);
+				creatRegisterAddress(address);
+				
+				//creat table if it hasn't existed
+				if (isExist(address) == 0) {
+					FILE* pFileCreat;
+					pFileCreat = fopen(address, "w");		
+					creatRegisterForm(pFileCreat);
+					fclose(pFileCreat);
+					printf("File has not existed\nCreating new list...\n");
+				}
+		
+				//get information from file
+				FILE* pFileRead;
+				pFileRead = fopen(address, "r");
+								
+				getRegistered(pFileRead);
+				fclose(pFileRead);
+				
+				printRegisteredList(&numStu);
+				break;
+			}
+			
+			case 4:{
+				
+			}
+		}
+	}while (chooseEventMenu != 4);
+}	
+
+
+void creatRegisterAddress(char address[]) {
+	strcpy(address, "");
+	//declare file address
+	char idEvent[4];
+	printf("\n%40.0s");
+	printfGreen("Input event's id: ");
+	fflush(stdin);
+	scanf("%s", idEvent);
+	strcat(address, inputAddress);
+	strcat(address, idEvent);
+	strcat(address, ".txt");
+//	printf("\nFile located: \"%s\" \n", address);
+}
+
+void creatRegisterForm(FILE* pFile) {
+		//creatEAL(pFileCreat);		
+		char tmp[100] ="";
+		printf("number of student: %d\n", numStu);
+		
+		for (int i = 0; i <= numStu -1; i++) {
+			strcpy(tmp,"");
+			strcat(tmp,"0 0 ");
+			strcat(tmp,student[i].studentCode);
+			if (i < numStu -1)
+				strcat(tmp,"\n");
+			fprintf(pFile, tmp);
+		}
+}
+
+void getRegistered(FILE* pFile){
+	//get infermation from file
+	int i = 0;
+	char tmp[100];	
+	while (!feof(pFile)){
+		fflush(stdin);
+		fscanf(pFile, "%d", &eventAttendance[i].isRegistered);		
+		fscanf(pFile, "%d", &eventAttendance[i].isAttended);		
+		fscanf(pFile, "%s", eventAttendance[i].MSSV);			
+		i++;
+	}	
+}
+
+void writeEAL(FILE* pFile){
+	int i = 0;
+	char tmp[8];
+	for (i ; i<= numStu - 2; i++){
+		fflush(stdin);
+		fprintf(pFile, "%d %d %s\n", eventAttendance[i].isRegistered, eventAttendance[i].isAttended, eventAttendance[i].MSSV);
+	}
+	fprintf(pFile, "%d %d %s", eventAttendance[numStu - 1].isRegistered, eventAttendance[numStu - 1].isAttended, eventAttendance[numStu - 1].MSSV);
+}
+
+//main code
+ int main(int argc, char *argv[]) {
+	
 	char username[9];
 	char password[20];
 	char letter;
-
+	int chooseNumber;
+	int numAcc;
 	
-	int numAcc;// position to get user account	
-
-	//read student information
-	FILE* pAcc;
+//	hidecursor();
 	
-	pAcc = fopen("account.txt", "r");
-	
-	int numStu;
-
-	getInfo(pAcc, &numStu);
-	fclose(pAcc);
-		
-	//check account and print menu
-	do{
-		// Get account
+	do{		
 		fflush(stdin);
 		getUsername(username);
 		getPassword(password, username);
+			
+		FILE* pFileStu;
+		pFileStu = fopen("account.txt", "r");
+		getInfo(pFileStu, &numStu);
 		
-		printf("%d", checkAcc(numStu, username, password, &numAcc));
-		if(checkAcc(numStu, username, password, &numAcc))
-		{
-			system("cls");
-			int choice;
-			//lay tu day
-			do
-			{
-				printMainMenu();
-				choice = getChoice(5);
-				switch (choice)
-				{
-					case 1:
-						member(&numStu, username, pAcc,numAcc);
-						break;
-				}
-				system("cls");
-			}while (choice != 5);
-		}else 
-			{
-			//	system("cls");
+		if(checkAcc(numStu, username, password, &numAcc)){
+			
+			strcat(studentCurrentCode, username);
+						
+			if (decentralizeStu(studentCurrentCode) == 1) {
+				strcpy(decentralization, "Administator");
+			} else if (decentralizeStu(studentCurrentCode) == 2) {
+				strcpy(decentralization, "Fund Manager");
+			} else strcpy(decentralization, "Club member");
+			
+			do{
 				
-				printf("Account does not exist!\n");		
-			}
-		//toi day	
+				system("cls");
+				SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
+				printf("Hello, %s, your No. is %d\n", student[numAcc].name, noStuCoSearch(studentCurrentCode) + 1); 
+				//noStuCoSearch(studentCurrentCode) is No. in DB
+				printf("Decentralization: [%s]", decentralization);
+				
+				gotoxy(0, 3);
+				printLogo();
+				
+				printMainMenu(&chooseNumber);
+				switch (chooseNumber){
+					
+					case 1:{
+//						printTable(numStu);
+						member(&numStu, username, pFileStu, &numAcc);
+						break;
+					}
+					
+					case 2:{
+						// event menu
+						FILE *pFileEvent;
+						pFileEvent = fopen("event.txt", "r");
+						int numEvent;
+						
+						if(decentralizeStu(studentCurrentCode) == 1) 
+							eventMenuAdmin(pFileEvent, &numEvent);
+						else
+							eventMenuM(pFileEvent, &numEvent);
+						fclose(pFileEvent);
+						break;
+					}
+					
+					case 3:{
+						
+						//fund menu
+						
+						int numMonthly = 0;
+						int numStatistic = 0;
+						fundMenuM(&numMonthly, &numStatistic);
+						break;
+					}
+					case 4:{
+						
+						//announcement
+						
+						if(decentralizeStu(studentCurrentCode) == 1) 
+							announcementA();
+						else
+							announcementM();
+											
+						break;
+					}
+					case 5:{
+						//exit
+						break;
+					}	
+				}
+			 		
+			}while (chooseNumber != 5);
+		}else {printf("Account does not exist!\n");		
+		}
 	}while (!checkAcc(numStu, username, password, &numAcc));
-	
-
-	return 0;
+	return(0);
 }

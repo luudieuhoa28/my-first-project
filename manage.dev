@@ -1,6 +1,6 @@
 [Project]
-FileName=Project.dev
-Name=Project
+FileName=manage.dev
+Name=Project2
 Type=1
 Ver=2
 ObjFiles=
@@ -19,7 +19,7 @@ ObjectOutput=
 LogOutput=
 LogOutputEnabled=0
 OverrideOutput=0
-OverrideOutputName=
+OverrideOutputName=manage.exe
 HostApplication=
 UseCustomMakefile=0
 CustomMakefile=
@@ -27,9 +27,9 @@ CommandLine=
 Folders=
 IncludeVersionInfo=0
 SupportXPThemes=0
-CompilerSet=1
-CompilerSettings=0000000000000000001000000
-UnitCount=10
+CompilerSet=0
+CompilerSettings=00000000a0000000000000000
+UnitCount=17
 
 [VersionInfo]
 Major=1
@@ -60,8 +60,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit2]
-FileName=getAcc.h
+[Unit3]
+FileName=print_logo.h
 CompileCpp=0
 Folder=
 Compile=1
@@ -70,8 +70,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit3]
-FileName=getAcc.c
+[Unit2]
+FileName=print_logo.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -81,7 +81,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=decentralize.h
+FileName=gotoxy.h
 CompileCpp=0
 Folder=
 Compile=1
@@ -91,7 +91,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit5]
-FileName=decentralize.c
+FileName=gotoxy.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -101,7 +101,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit6]
-FileName=menu.h
+FileName=print_menu.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -111,7 +111,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit7]
-FileName=menu.c
+FileName=print_menu.h
 CompileCpp=0
 Folder=
 Compile=1
@@ -121,7 +121,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit8]
-FileName=choice.h
+FileName=decentralize.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -131,7 +131,77 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit9]
-FileName=choice.c
+FileName=decentralize.h
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit11]
+FileName=choice.h
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit12]
+FileName=getAcc.c
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit13]
+FileName=getAcc.h
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit14]
+FileName=menu.c
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit15]
+FileName=menu.h
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit16]
+FileName=hidecursor.c
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit17]
+FileName=hidecursor.h
 CompileCpp=0
 Folder=
 Compile=1
@@ -141,7 +211,8 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit10]
-FileName=Untitled1
+FileName=choice.c
+CompileCpp=0
 Folder=
 Compile=1
 Link=1

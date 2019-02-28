@@ -5,4 +5,4 @@ void printSpeMenu();
 void printNorMenu();
 
 //print main menu
-void printMainMenu();
+void printMainMenuHoa();

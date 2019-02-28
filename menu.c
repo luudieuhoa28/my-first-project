@@ -26,7 +26,7 @@ void printNorMenu()
 	printf("\t\t\t\t\t.------------------------------------.\n");
 }
 
-void printMainMenu()
+void printMainMenuHoa()
 {
 	printf("\n\n\n\n\n\n\n");
 	printf("\t\t\t\t\t.------------------------------------.\n");

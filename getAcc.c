@@ -1,5 +1,7 @@
 #include <conio.h>
-
+#include"print_logo.h"
+#include"print_menu.h"
+#include"gotoxy.h"
 // Get username
 void getUsername(char username[])
 {
@@ -13,19 +15,34 @@ void getUsername(char username[])
 	do
 	{
 		system("cls");
-		printf("\n\n\n\n");
-		printf("                    _____________________________________________________\n");
-		printf("                    |Enter your username: %s\n", username);
-		printf("                    _____________________________________________________\n");
-		printf("                    |Enter your password: \n");
-		printf("                    _____________________________________________________\n");
+		gotoxy(0,8);
+		printFCode();
+		printf("\n\n\n");
+		printf("%60.0s");
+		printfGreen(":--------------------------------------------------------:\n");
+		printf("%60.0s");
+		printfGreen("|   Enter your username: ");
+		printf("%s\n", username);
+		printf("%60.0s");
+		printfGreen("|                                                        |\n");
+		printf("%60.0s");
+		printfGreen("|   Enter your password: \n");
+		printf("%60.0s");
+		printfGreen(":--------------------------------------------------------:\n");
 	
+		gotoxy(117, 24);
+		printfGreen("|");
+		gotoxy(117, 25);
+		printfGreen("|");
+		gotoxy(117, 26);
+		printfGreen("|");
+		
 		tmp = getch();
 		if(tmp != 13 && tmp != 8)
 		{
 			username[i] = tmp;
 			i++;
-		}else if (tmp == 8)
+		}else if (tmp == 8 && i >= 1)
 			{
 				i--;
 				username[i] = '\0';
@@ -50,13 +67,29 @@ void getPassword(char password[], char username[])
 	do
 	{
 		system("cls");
-		printf("\n\n\n\n");
-		printf("                    _____________________________________________________\n");
-		printf("                    |Enter your username: %s\n", username);
-		printf("                    _____________________________________________________\n");
-		printf("                    |Enter your password: %s\n", star);
-		printf("                    _____________________________________________________\n");
-	
+		gotoxy(0,8);
+		printFCode();
+		printf("\n\n\n");
+		printf("%60.0s");
+		printfGreen(":--------------------------------------------------------:\n");
+		printf("%60.0s");
+		printfGreen("|   Enter your username: ");
+		printf("%s\n", username);
+		printf("%60.0s");
+		printfGreen("|                                                        |\n");
+		printf("%60.0s");
+		printfGreen("|   Enter your password: ");
+		printf("%s\n", star);
+		printf("%60.0s");
+		printfGreen(":--------------------------------------------------------:\n");
+		
+		gotoxy(117, 24);
+		printfGreen("|");
+		gotoxy(117, 25);
+		printfGreen("|");
+		gotoxy(117, 26);
+		printfGreen("|");
+		
 		tmp = getch();
 		if(tmp != 13 && tmp != 8)
 		{
