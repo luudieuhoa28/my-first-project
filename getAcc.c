@@ -96,7 +96,7 @@ void getPassword(char password[], char username[])
 			star[i] = '*';
 			password[i] = tmp;
 			i++;
-		}else if (tmp == 8)
+		}else if (tmp == 8 && i >= 1)
 			{
 				i--;
 				password[i] = '\0';
