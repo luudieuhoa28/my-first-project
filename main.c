@@ -14,7 +14,7 @@
 #include "getAcc.h"
 #include "menu.h"
 
-char inputAddress[100] = "D:\\study\\train c\\classProject\\Nam\\member_Event_Attendant_Check\\";
+char inputAddress[100] = "D:\\study\\train c\\classProject\\Project1\\my-first-project\\member_Event_Attendant_Check\\";
 int numStu;
 char studentCurrentCode[9];
 char decentralization[20];
@@ -24,6 +24,11 @@ char decentralization[20];
 	char ad2[9];
 	char ad3[9];
 	char ad4[9];
+
+//const
+char studentCurrentName[30];
+char decentralization[20];
+int studentCurrentNum;
 //creat struct
 struct students 
 	{
@@ -1310,9 +1315,8 @@ void controlAcc(FILE* pAcc, int numStu, int* pNumAcc, char password[], char user
 	{
 		system("cls");
 		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-		printf("Hello, %s, your No. is %d\n", student[*pNumAcc].name, noStuCoSearch(studentCurrentCode) + 1); 
-		//noStuCoSearch(studentCurrentCode) is No. in DB
-		printf("Decentralization: [%s]", decentralization);
+		printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum);
+				printf("Role: [%s]", decentralization);
 		
 		gotoxy(0, 3);
 		printLogo();
@@ -1347,9 +1351,8 @@ void member(int* pNumStu, char username[], FILE* pAcc, int* pNumAcc, char passwo
 //			printSpeMenu();	
 			system("cls");
 			SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-			printf("Hello, %s, your No. is %d\n", student[*pNumAcc].name, noStuCoSearch(studentCurrentCode) + 1); 
-			//noStuCoSearch(studentCurrentCode) is No. in DB
-			printf("Decentralization: [%s]", decentralization);
+			printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum);
+				printf("Role: [%s]", decentralization);
 			
 			gotoxy(0, 3);
 			printLogo();
@@ -1389,10 +1392,8 @@ void member(int* pNumStu, char username[], FILE* pAcc, int* pNumAcc, char passwo
 //					printNorMenu();
 					system("cls");
 					SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-					printf("Hello, %s, your No. is %d\n", student[*pNumAcc].name, noStuCoSearch(studentCurrentCode) + 1); 
-					//noStuCoSearch(studentCurrentCode) is No. in DB
-					printf("Decentralization: [%s]", decentralization);
-					
+					printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum);
+					printf("Role: [%s]", decentralization);
 					gotoxy(0, 3);
 					printLogo();
 					printMemberMenuM(&choice);
@@ -1548,14 +1549,15 @@ int checkAcc(int numStu, char username[], char password[], int* pNumAcc)
 }
 
 //get number
+//get number
 void announcementA(){
 	char str[255] = "";
 	int chooseNum;
 	do{
 		system("cls");
 		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
-		printf("Decentralization: [%s]", decentralization);
+		printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum);
+				printf("Role: [%s]", decentralization);
 		gotoxy(0, 3);
 		printLogo();
 		
@@ -1568,8 +1570,8 @@ void announcementA(){
 				
 				//print header
 				SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-				printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
-				printf("Decentralization: [%s]", decentralization);
+				printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum);
+				printf("Role: [%s]", decentralization);
 				gotoxy(0, 3);
 				printLogo();
 				
@@ -1596,8 +1598,8 @@ void announcementA(){
 				
 				//print header
 				SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-				printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
-				printf("Decentralization: [%s]", decentralization);
+				printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum);
+				printf("Role: [%s]", decentralization);
 				gotoxy(0, 3);
 				printLogo();
 				
@@ -1609,6 +1611,9 @@ void announcementA(){
 				int letter;
 				int prevousLine = 14;
 				do {
+					gotoxy(0, 24);
+					printfGreen("                                                  \n                                      ");
+					
 					gotoxy(0, prevousLine);
 					printf("%30.0s");
 					printfGreen("|   ");
@@ -1618,7 +1623,8 @@ void announcementA(){
 					prevousLine++;
 					
 					gotoxy(0, 24);
-					printfGreen("Press [enter] to comtinue\n[Esc] to finish Process\n");
+					printfGreen("Press [Enter] to add new line\nPress [Esc] to finish Process\n");
+					
 					letter = getch();
 					if (letter == 13) fputs("\n", pFileAnn);
 				} while (letter != 27);
@@ -1641,8 +1647,8 @@ void announcementM(){
 	do{
 		system("cls");
 		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
-		printf("Decentralization: [%s]", decentralization);
+		printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum);
+		printf("Role: [%s]", decentralization);
 		gotoxy(0, 3);
 		printLogo();
 		
@@ -1655,8 +1661,8 @@ void announcementM(){
 				
 				//print header
 				SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-				printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
-				printf("Decentralization: [%s]", decentralization);
+				printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum); //noStuCoSearch(studentCurrentCode) is No. in DB
+				printf("Role: [%s]", decentralization);
 				gotoxy(0, 3);
 				printLogo();
 				
@@ -1817,8 +1823,8 @@ void printEventList(int* pNumEvent){
 	{	
 		system("cls");
 		gotoxy(0, 5);
-		printf("%75.0s");
-		printfGreen(" Event list\n");
+		printf("%85.0s");
+		printfGreen("EVENT LIST\n");
 		printf(":-------:--------------------------------------------:--------------:----------------------:--------------------------------------------------------------------------------------------------:\n");
 		printf("|   Id  |                     Name                   |     Time     |       Place          |                                                 Contents                                         |\n");
 		printf(":-------:--------------------------------------------:--------------:----------------------:--------------------------------------------------------------------------------------------------:\n");
@@ -1877,9 +1883,12 @@ void printEventInfo(int orderNum){
 		for(int j = 1;(j <= 21 - strlen(event[i].place)); j++) {
 			printf(" ");
 		}
-		if (strlen(event[i].contents) <= 93)
-		    printf("|    %s |\n", event[i].contents);
-		else{
+		if (strlen(event[i].contents) <= 93){
+		    printf("|    %s ", event[i].contents);
+			for (int j = 0; j <= 92 - strlen(event[i].contents); j++) 
+				printf(" ");
+			printf("|\n");
+		} else{
 //			printf(": %0.93s... :\n", event[i].contents);
 			char str[255];
 			strcpy(str, event[i].contents);
@@ -1902,7 +1911,7 @@ void printEventInfo(int orderNum){
 		printf(":-------:--------------------------------------------:--------------:----------------------:--------------------------------------------------------------------------------------------------:\n");
 }
 
-int isExist(char str[]){
+int isFileExist(char str[]){
 	FILE * pFile;
 	if((pFile = fopen(str,"r"))!=NULL) {
         fclose(pFile);
@@ -1913,6 +1922,16 @@ int isExist(char str[]){
         }
 }
 
+int isEventExist(char str[], int* pNumEvent){
+	int flag = 0;
+	for (int i = 0; i <= *pNumEvent - 1; i++){
+		if(strcmp(event[i].idEvent, str) == 0) {
+	        flag = 1;
+	    }
+	}
+	if (flag == 1 ) return(1);
+	else return(0);
+}
 
 //main's function
 
@@ -2058,8 +2077,8 @@ void fundMenuM(int* pNumMonthly, int* pNumStatistic){
 	do{
 		system("cls");
 		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
-		printf("Decentralization: [%s]", decentralization);
+		printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum); //noStuCoSearch(studentCurrentCode) is No. in DB
+		printf("Role: [%s]", decentralization);
 		gotoxy(0, 3);
 		printLogo();
 		
@@ -2129,6 +2148,58 @@ int i = 0;
 //		system("pause");
 }
 
+int addNewEvent(FILE* pFile, int* pNumEvent) {
+	int i = *pNumEvent;
+	char tmp[255];
+	
+	printfGreen("ADD NEW EVENT\n\n");
+	fputs("\n", pFile);
+	
+	do {
+		printfGreen("Input event's id (format: nnn): ");
+		fflush(stdin);
+		gets(tmp);
+	} while (strlen(tmp) != 3);
+	strcpy(event[i].idEvent, tmp);
+	fputs(tmp, pFile);
+	fputs("\n", pFile);
+	
+	fflush(stdin);
+	printfGreen("Input event's name: ");
+	gets(tmp);
+	strcpy(event[i].name, tmp);
+	fputs(tmp, pFile);
+	fputs("\n", pFile);
+	
+	do{
+		fflush(stdin);
+		printfGreen("Input event's time (format : dd/mm/yyyy): ");
+		gets(tmp);	
+	} while(strlen(tmp) != 10);
+	strcpy(event[i].time, tmp);
+	fputs(tmp, pFile);
+	fputs("\n", pFile);
+	
+	do{
+		fflush(stdin);
+		printfGreen("Input event's place : ");
+		gets(tmp);
+	} while (strlen(tmp) > 20 );
+	strcpy(event[i].place, tmp);
+	fputs(tmp, pFile);
+	fputs("\n", pFile);
+	
+	fflush(stdin);
+	printfGreen("Input event's contents: ");
+	gets(tmp);
+	strcpy(event[i].contents, tmp);
+	fputs(tmp, pFile);
+
+	*pNumEvent ++;
+	printfGreen("Add new event success!\n");
+	system("pause");
+}
+			
 //event menu
 void eventMenuAdmin(FILE* pFileEvent, int* pNumEvent){
 	
@@ -2139,8 +2210,8 @@ void eventMenuAdmin(FILE* pFileEvent, int* pNumEvent){
 	do{
 		system("cls");
 		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
-		printf("Decentralization: [%s]", decentralization);
+		printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum); //noStuCoSearch(studentCurrentCode) is No. in DB
+		printf("Role: [%s]", decentralization);
 		gotoxy(0, 3);
 		printLogo();
 	
@@ -2154,133 +2225,170 @@ void eventMenuAdmin(FILE* pFileEvent, int* pNumEvent){
 				break;
 			}
 			case 2:{
-				
+				system("cls");
 				//creat files's address
 				char address[100];
 //				printEventList(pNumEvent);
-				creatRegisterAddress(address);
-				printf("Confirm address: \"%s\"\n", address);
+			    char idEvent[4];
+				printfGreen("Input event's id: ");
+				fflush(stdin);
+				scanf("%s", idEvent);
+				if (isEventExist(idEvent, pNumEvent) == 1) {
+					creatEventAddress(address, idEvent);
+//					printf("Confirm address: \"%s\"\n", address);
+					
+					//creat table if it hasn't existed
+					if (isFileExist(address) == 0) {
+						FILE* pFileCreat;
+						pFileCreat = fopen(address, "w");		
+						creatRegisterForm(pFileCreat);
+						fclose(pFileCreat);
+//						printf("File has not existed\nCreating new list...\n");
+					}
+			
+					//get information from file
+					FILE* pFileRead;
+					pFileRead = fopen(address, "r");
+									
+					getRegistered(pFileRead);
+					fclose(pFileRead);
+					
+					//edit information from file
+					int num;
+					num = noStuCoSearch(studentCurrentCode);
+					eventAttendance[num].isRegistered = 1;	
 				
-				//creat table if it hasn't existed
-				if (isExist(address) == 0) {
-					FILE* pFileCreat;
-					pFileCreat = fopen(address, "w");		
-					creatRegisterForm(pFileCreat);
-					fclose(pFileCreat);
-					printf("File has not existed\nCreating new list...\n");
+				
+					printf(":---------------------------------------------:-----------------:------------:------------:\n");
+					printf("|                   Name                      |       MSSV      | Registered |  Attended  |\n");
+					printf(":---------------------------------------------:-----------------:------------:------------|\n");
+					printRegisteredInfo(num);
+					printf("'---------------------------------------------'-----------------'------------'------------'\n");
+					
+					//Write in file
+					FILE* pFileWrite;
+					pFileWrite = fopen(address, "w");
+					writeEAL(pFileWrite);
+					fclose(pFileWrite);
+					
+					printfGreen("Register success!\n");
+					system("pause");
 				}
-		
-				//get information from file
-				FILE* pFileRead;
-				pFileRead = fopen(address, "r");
-								
-				getRegistered(pFileRead);
-				fclose(pFileRead);
-				
-				//edit information from file
-				int num;
-				num = noStuCoSearch(studentCurrentCode);
-				eventAttendance[num].isRegistered = 1;	
-			
-			
-				printf(":---------------------------------------------:-----------------:------------:------------:\n");
-				printf("|                   Name                      |       MSSV      | Registered |  Attended  |\n");
-				printf(":---------------------------------------------:-----------------:------------:------------|\n");
-				printRegisteredInfo(num);
-				printf("'---------------------------------------------'-----------------'------------'------------'\n");
-				
-				//Write in file
-				FILE* pFileWrite;
-				pFileWrite = fopen(address, "w");
-				writeEAL(pFileWrite);
-				fclose(pFileWrite);
-				
-				printfGreen("Register success!\n");
-				system("pause");
-				
+				else {
+					printfGreen("Wrong id event!\n");
+					system("pause");
+				}
 				break;
 			}
 			case 3:{			
+				system("cls");
 				//reat files's address
 				char address[100];
 //				printEventList(pNumEvent);
-				creatRegisterAddress(address);
-				
-				//creat table if it hasn't existed
-				if (isExist(address) == 0) {
-					FILE* pFileCreat;
-					pFileCreat = fopen(address, "w");		
-					creatRegisterForm(pFileCreat);
-					fclose(pFileCreat);
-					printf("File has not existed\nCreating new list...\n");
+				char idEvent[4];
+				printfGreen("Input event's id: ");
+				fflush(stdin);
+				scanf("%s", idEvent);
+				if (isEventExist(idEvent, pNumEvent) == 1) {
+					creatEventAddress(address, idEvent);
+					//creat table if it hasn't existed
+					if (isFileExist(address) == 0) {
+						FILE* pFileCreat;
+						pFileCreat = fopen(address, "w");		
+						creatRegisterForm(pFileCreat);
+						fclose(pFileCreat);
+//						printf("File has not existed\nCreating new list...\n");
+					}
+			
+					//get information from file
+					FILE* pFileRead;
+					pFileRead = fopen(address, "r");
+									
+					getRegistered(pFileRead);
+					fclose(pFileRead);
+					
+					printRegisteredList(&numStu);
+					
 				}
-		
-				//get information from file
-				FILE* pFileRead;
-				pFileRead = fopen(address, "r");
-								
-				getRegistered(pFileRead);
-				fclose(pFileRead);
-				
-				printRegisteredList(&numStu);
+				else {
+					printfGreen("Wrong id event!\n");
+					system("pause");
+				}
 				break;
 			}
 			
 			case 4:{
+				system("cls");
 				//creat files's address
 				char address[100];
-				creatRegisterAddress(address);
-				printf("Confirm address: \"%s\"\n", address);
-				
-				//creat table if it hasn't existed
-				if (isExist(address) == 0) {
-					FILE* pFileCreat;
-					pFileCreat = fopen(address, "w");		
-					creatRegisterForm(pFileCreat);
-					fclose(pFileCreat);
-					printf("File has not existed\nCreating new list...\n");
-				}
-		
-				//get information from file
-				FILE* pFileRead;
-				pFileRead = fopen(address, "r");
-								
-				getRegistered(pFileRead);
-				fclose(pFileRead);
-				
-				//edit information from file
-				int num;
-				char studentCode[9];
-				do {
-					printf("Input student Code:");
-					fflush(stdin);
-					scanf("%s", studentCode);
-				}while (noStuCoSearch(studentCode) == -1) ;
-				
-				num = noStuCoSearch(studentCode);
-				eventAttendance[num].isAttended = 1;	
+				char idEvent[4];
+				printfGreen("Input event's id: ");
+				fflush(stdin);
+				scanf("%s", idEvent);
+				if (isEventExist(idEvent, pNumEvent) == 1) {
+					creatEventAddress(address, idEvent);
+//					printf("Confirm address: \"%s\"\n", address);
+					
+					//creat table if it hasn't existed
+					if (isFileExist(address) == 0) {
+						FILE* pFileCreat;
+						pFileCreat = fopen(address, "w");		
+						creatRegisterForm(pFileCreat);
+						fclose(pFileCreat);
+//						printf("File has not existed\nCreating new list...\n");
+					}
 			
-				printf(":---------------------------------------------:-----------------:------------:------------:\n");
-				printf("|                   Name                      |       MSSV      | Registered |  Attended  |\n");
-				printf(":---------------------------------------------:-----------------:------------:------------|\n");
-				printRegisteredInfo(num);
-				printf("'---------------------------------------------'-----------------'------------'------------'\n");
+					//get information from file
+					FILE* pFileRead;
+					pFileRead = fopen(address, "r");
+									
+					getRegistered(pFileRead);
+					fclose(pFileRead);
+					
+					//edit information from file
+					int num;
+					char studentCode[9];
+					do {
+						printfGreen("Input student's id':");
+						fflush(stdin);
+						scanf("%s", studentCode);
+					}while (noStuCoSearch(studentCode) == -1) ;
+					
+					num = noStuCoSearch(studentCode);
+					eventAttendance[num].isAttended = 1;	
 				
-				//Write in file
-				FILE* pFileWrite;
-				pFileWrite = fopen(address, "w");
-				writeEAL(pFileWrite);
-				fclose(pFileWrite);
-				
-				printfGreen("Check attendant success!\n");
-				system("pause");
+					printf(":---------------------------------------------:-----------------:------------:------------:\n");
+					printf("|                   Name                      |       MSSV      | Registered |  Attended  |\n");
+					printf(":---------------------------------------------:-----------------:------------:------------|\n");
+					printRegisteredInfo(num);
+					printf("'---------------------------------------------'-----------------'------------'------------'\n");
+					
+					//Write in file
+					FILE* pFileWrite;
+					pFileWrite = fopen(address, "w");
+					writeEAL(pFileWrite);
+					fclose(pFileWrite);
+					
+					printfGreen("Check attendant success!\n");
+					system("pause");	
+				} else {
+					printfGreen("Wrong id event!\n");
+					system("pause");
+				}
 				break;
 			}
 			case 5:{
+				system("cls");
+				FILE* pFileAdd;
+				pFileAdd = fopen("event.txt", "a");
+				addNewEvent(pFileAdd, pNumEvent);
+				fclose(pFileAdd);
+			}
+			case 6:{
 			}
 		
 		}
-	}while (chooseEventMenu != 5);
+	}while (chooseEventMenu != 6);
 }	
 
 void eventMenuM(FILE* pFileEvent, int* pNumEvent){
@@ -2292,8 +2400,8 @@ void eventMenuM(FILE* pFileEvent, int* pNumEvent){
 	do{
 		system("cls");
 		SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-		printf("Hello, %s, your No. is %d\n", studentCurrentCode, noStuCoSearch(studentCurrentCode) + 1); //noStuCoSearch(studentCurrentCode) is No. in DB
-		printf("Decentralization: [%s]", decentralization);
+		printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum); //noStuCoSearch(studentCurrentCode) is No. in DB
+		printf("Role: [%s]", decentralization);
 		gotoxy(0, 3);
 		printLogo();
 		
@@ -2307,74 +2415,93 @@ void eventMenuM(FILE* pFileEvent, int* pNumEvent){
 				break;
 			}
 			case 2:{
-				
+				system("cls");
 				//creat files's address
 				char address[100];
 //				printEventList(pNumEvent);
-				creatRegisterAddress(address);
-				printf("Confirm address: \"%s\"\n", address);
-				
-				//creat table if it hasn't existed
-				if (isExist(address) == 0) {
-					FILE* pFileCreat;
-					pFileCreat = fopen(address, "w");		
-					creatRegisterForm(pFileCreat);
-					fclose(pFileCreat);
-					printf("File has not existed\nCreating new list...\n");
-				}
-		
-				//get information from file
-				FILE* pFileRead;
-				pFileRead = fopen(address, "r");
-								
-				getRegistered(pFileRead);
-				fclose(pFileRead);
-				
-				//edit information from file
-				int num;
-				num = noStuCoSearch(studentCurrentCode);
-				eventAttendance[num].isRegistered = 1;	
+				char idEvent[4];
+				printfGreen("Input event's id: ");
+				fflush(stdin);
+				scanf("%s", idEvent);
+				if (isEventExist(idEvent, pNumEvent) == 1) {
+					creatEventAddress(address, idEvent);
+//					printf("Confirm address: \"%s\"\n", address);
+					
+					//creat table if it hasn't existed
+					if (isFileExist(address) == 0) {
+						FILE* pFileCreat;
+						pFileCreat = fopen(address, "w");		
+						creatRegisterForm(pFileCreat);
+						fclose(pFileCreat);
+//						printf("File has not existed\nCreating new list...\n");
+					}
 			
-				printf(":---------------------------------------------:-----------------:------------:------------:\n");
-				printf("|                   Name                      |       MSSV      | Registered |  Attended  |\n");
-				printf(":---------------------------------------------:-----------------:------------:------------|\n");
-				printRegisteredInfo(num);
-				printf("'---------------------------------------------'-----------------'------------'------------'\n");
+					//get information from file
+					FILE* pFileRead;
+					pFileRead = fopen(address, "r");
+									
+					getRegistered(pFileRead);
+					fclose(pFileRead);
+					
+					//edit information from file
+					int num;
+					num = noStuCoSearch(studentCurrentCode);
+					eventAttendance[num].isRegistered = 1;	
 				
-				//Write in file
-				FILE* pFileWrite;
-				pFileWrite = fopen(address, "w");
-				writeEAL(pFileWrite);
-				fclose(pFileWrite);
-				
-				printfGreen("Register success!\n");
-				system("pause");
-				
+					printf(":---------------------------------------------:-----------------:------------:------------:\n");
+					printf("|                   Name                      |       MSSV      | Registered |  Attended  |\n");
+					printf(":---------------------------------------------:-----------------:------------:------------|\n");
+					printRegisteredInfo(num);
+					printf("'---------------------------------------------'-----------------'------------'------------'\n");
+					
+					//Write in file
+					FILE* pFileWrite;
+					pFileWrite = fopen(address, "w");
+					writeEAL(pFileWrite);
+					fclose(pFileWrite);
+					
+					printfGreen("Register success!\n");
+					system("pause");	
+				} else {
+					printfGreen("Wrong id event!\n");
+					system("pause");
+				}
 				break;
 			}
 			case 3:{			
+				system("cls");
 				//reat files's address
 				char address[100];
 //				printEventList(pNumEvent);
-				creatRegisterAddress(address);
-				
-				//creat table if it hasn't existed
-				if (isExist(address) == 0) {
-					FILE* pFileCreat;
-					pFileCreat = fopen(address, "w");		
-					creatRegisterForm(pFileCreat);
-					fclose(pFileCreat);
-					printf("File has not existed\nCreating new list...\n");
+				char idEvent[4];
+				printfGreen("Input event's id: ");
+				fflush(stdin);
+				scanf("%s", idEvent);
+				if (isEventExist(idEvent, pNumEvent) == 1) {
+					creatEventAddress(address, idEvent);
+					
+					//creat table if it hasn't existed
+					if (isFileExist(address) == 0) {
+						FILE* pFileCreat;
+						pFileCreat = fopen(address, "w");		
+						creatRegisterForm(pFileCreat);
+						fclose(pFileCreat);
+						printf("File has not existed\nCreating new list...\n");
+					}
+			
+					//get information from file
+					FILE* pFileRead;
+					pFileRead = fopen(address, "r");
+									
+					getRegistered(pFileRead);
+					fclose(pFileRead);
+					
+					printRegisteredList(&numStu);	
+				} else {
+					printfGreen("Wrong id event!\n");
+					system("pause");
 				}
-		
-				//get information from file
-				FILE* pFileRead;
-				pFileRead = fopen(address, "r");
-								
-				getRegistered(pFileRead);
-				fclose(pFileRead);
 				
-				printRegisteredList(&numStu);
 				break;
 			}
 			
@@ -2386,14 +2513,10 @@ void eventMenuM(FILE* pFileEvent, int* pNumEvent){
 }	
 
 
-void creatRegisterAddress(char address[]) {
+void creatEventAddress(char address[], char idEvent[]) {
 	strcpy(address, "");
 	//declare file address
-	char idEvent[4];
-	printf("\n%40.0s");
-	printfGreen("Input event's id: ");
-	fflush(stdin);
-	scanf("%s", idEvent);
+	
 	strcat(address, inputAddress);
 	strcat(address, idEvent);
 	strcat(address, ".txt");
@@ -2437,7 +2560,6 @@ void writeEAL(FILE* pFile){
 	}
 	fprintf(pFile, "%d %d %s", eventAttendance[numStu - 1].isRegistered, eventAttendance[numStu - 1].isAttended, eventAttendance[numStu - 1].MSSV);
 }
-
 //main code
  int main(int argc, char *argv[]) {
 	
@@ -2471,6 +2593,9 @@ void writeEAL(FILE* pFile){
 		if(checkAcc(numStu, username, password, &numAcc)){
 			
 			strcat(studentCurrentCode, username);
+			// strcat(studentCurrentCode, username);
+			strcat(studentCurrentName, student[noStuCoSearch(studentCurrentCode)].name);
+			studentCurrentNum = noStuCoSearch(studentCurrentCode) + 1;
 						
 			if (decentralizeStu(studentCurrentCode, ad1, ad2, ad3, ad4) == 1) {
 				strcpy(decentralization, "Administator");
@@ -2482,9 +2607,8 @@ void writeEAL(FILE* pFile){
 				
 				system("cls");
 				SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
-				printf("Hello, %s, your No. is %d\n", student[numAcc].name, noStuCoSearch(studentCurrentCode) + 1); 
-				//noStuCoSearch(studentCurrentCode) is No. in DB
-				printf("Decentralization: [%s]", decentralization);
+				printf("Hello, %s, your No. is %d\n", studentCurrentName, studentCurrentNum);
+				printf("Role: [%s]", decentralization);
 				
 				gotoxy(0, 3);
 				printLogo();

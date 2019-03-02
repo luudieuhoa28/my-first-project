@@ -33,21 +33,21 @@ int printMainMenu(int* pNum){
 	*pNum = 0;
 	do{		
 		gotoxy(0, 14);
-		printf("%40.0s");
+		printf("%67.0s");
 		printfGreen("MAIN MENU\n\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 1) printfH("Members club menu\n"); 
 		else printf("Members club menu\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 2) printfH("Event menu\n"); 
 		else printf("Event menu\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 3) printfH("Fund menu\n");
 		else printf("Fund menu\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 4) printfH("F-Code's announcement\n");
 		else printf("F-Code's announcement\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 5) printfH("Exit\n");
 		else printf("Exit\n");
 //		printfGreen("\nExit: press [esc] to exit!\n");				
@@ -72,12 +72,12 @@ int printMainMenu(int* pNum){
 				}
 				if (letter == 13) {
 						*pNum = position;
-						letter = 27;
+						letter = 13;
 						inputted = 0;
 				}
-		} while(letter != 27 && inputted != 1);
+		} while(letter != 13 && inputted != 1);
 //		system("cls");
-	} while(letter != 27);
+	} while(letter != 13);
 	system("cls");
 }
 
@@ -89,22 +89,25 @@ int chooseEventMenuA(int* pNum){
 	*pNum = 0;
 	do{		
 		gotoxy(0, 14);
-		printf("%40.0s");
+		printf("%67.0s");
 		printfGreen("EVENT MENU\n\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 1) printfH("Print Event list\n"); 
 		else printf("Print Event list\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 2) printfH("Register for future events\n"); 
 		else printf("Register for future events\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 3) printfH("Show resigntered & attendant check table\n");
 		else printf("Show resigntered & attendant check table\n");
-		printf("%40.0s");
-		if (position == 4) printfH("Check attendant (only available for administrator)\n");
-		else printf("Check attendant (only available for administrator)\n");
-		printf("%40.0s");
-		if (position == 5) printfH("Exit\n");
+		printf("%67.0s");
+		if (position == 4) printfH("Check attendant (administrator)\n");
+		else printf("Check attendant (administrator)\n");
+		printf("%67.0s");
+		if (position == 5) printfH("Add new event (administrator)\n");
+		else printf("Add new event (administrator)\n");
+		printf("%67.0s");
+		if (position == 6) printfH("Exit\n");
 		else printf("Exit\n");
 
 		
@@ -115,7 +118,7 @@ int chooseEventMenuA(int* pNum){
 			letter = getch();
 				if (letter == - 32){
 					letter = getch();
-					if((letter == 80) && position < 5 ) {
+					if((letter == 80) && position < 6 ) {
 						position ++;
 						inputted = 1;
 //						printf("ok, %d\n", position);
@@ -128,12 +131,12 @@ int chooseEventMenuA(int* pNum){
 				}
 				if (letter == 13) {
 						*pNum = position;
-						letter = 27;
+						letter = 13;
 						inputted = 0;
 				}
-		} while(letter != 27 && inputted != 1);
+		} while(letter != 13 && inputted != 1);
 
-	} while(letter != 27);
+	} while(letter != 13);
 //	system("cls");
 }
 
@@ -145,18 +148,18 @@ int chooseEventMenuM(int* pNum){
 	*pNum = 0;
 	do{		
 		gotoxy(0, 14);
-		printf("%40.0s");
+		printf("%67.0s");
 		printfGreen("EVENT MENU\n\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 1) printfH("Print Event list\n"); 
 		else printf("Print Event list\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 2) printfH("Register for future events\n"); 
 		else printf("Register for future events\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 3) printfH("Show resigntered & attendant check table\n");
 		else printf("Show resigntered & attendant check table\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 4) printfH("Exit\n");
 		else printf("Exit\n");
 
@@ -181,12 +184,12 @@ int chooseEventMenuM(int* pNum){
 				}
 				if (letter == 13) {
 						*pNum = position;
-						letter = 27;
+						letter = 13;
 						inputted = 0;
 				}
-		} while(letter != 27 && inputted != 1);
+		} while(letter != 13 && inputted != 1);
 
-	} while(letter != 27);
+	} while(letter != 13);
 //	system("cls");
 }
 
@@ -198,15 +201,15 @@ int printFundMenuM(int* pNum){
 	*pNum = 0;
 	do{		
 		gotoxy(0, 14);
-		printf("%40.0s");
+		printf("%67.0s");
 		printfGreen("FUND MENU\n\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 1) printfH("Print fund's expend & income list\n"); 
 		else printf("Print fund's expend & income list\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 2) printfH("Print monthly fund\n"); 
 		else printf("Print monthly fund\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 3) printfH("Exit\n");
 		else printf("Exit\n");
 
@@ -231,12 +234,12 @@ int printFundMenuM(int* pNum){
 				}
 				if (letter == 13) {
 						*pNum = position;
-						letter = 27;
+						letter = 13;
 						inputted = 0;
 				}
-		} while(letter != 27 && inputted != 1);
+		} while(letter != 13 && inputted != 1);
 
-	} while(letter != 27);
+	} while(letter != 13);
 	system("cls");
 }
 
@@ -248,12 +251,12 @@ int printAnnouncementMenuM(int* pNum){
 	*pNum = 0;
 	do{		
 		gotoxy(0, 14);
-		printf("%40.0s");
+		printf("%67.0s");
 		printfGreen("ANNOUNCEMENT\n\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 1) printfH("Printf announcement\n"); 
 		else printf("Printf announcement\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 2) printfH("Exit\n");
 		else printf("Exit\n");
 
@@ -278,12 +281,12 @@ int printAnnouncementMenuM(int* pNum){
 				}
 				if (letter == 13) {
 						*pNum = position;
-						letter = 27;
+						letter = 13;
 						inputted = 0;
 				}
-		} while(letter != 27 && inputted != 1);
+		} while(letter != 13 && inputted != 1);
 
-	} while(letter != 27);
+	} while(letter != 13);
 	system("cls");
 }
 
@@ -295,15 +298,15 @@ int printAnnouncementMenuA(int* pNum){
 	*pNum = 0;
 	do{		
 		gotoxy(0, 14);
-		printf("%40.0s");
+		printf("%67.0s");
 		printfGreen("ANNOUNCEMENT\n\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 1) printfH("Printf announcement\n"); 
 		else printf("Printf announcement\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 2) printfH("Add new announcement\n"); 
 		else printf("Add new announcement\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 3) printfH("Exit\n");
 		else printf("Exit\n");
 
@@ -328,12 +331,12 @@ int printAnnouncementMenuA(int* pNum){
 				}
 				if (letter == 13) {
 						*pNum = position;
-						letter = 27;
+						letter = 13;
 						inputted = 0;
 				}
-		} while(letter != 27 && inputted != 1);
+		} while(letter != 13 && inputted != 1);
 
-	} while(letter != 27);
+	} while(letter != 13);
 	system("cls");
 }
 
@@ -345,27 +348,27 @@ int printMemberMenuA(int* pNum){
 	*pNum = 0;
 	do{		
 		gotoxy(0, 14);
-		printf("%40.0s");
+		printf("%67.0s");
 		printfGreen("MEMBER MENU\n\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 1) printfH("Print list of members\n"); 
 		else printf("Print list of members\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 2) printfH("Search for members\n");
 		else printf("Search for members\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 3) printfH("Add members\n");
 		else printf("Add members\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 4) printfH("Delete members\n");
 		else printf("Delete members\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 5) printfH("Edit information\n");
 		else printf("Edit information\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 6) printfH("Your account\n");
 		else printf("Your account\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 7) printfH("Exit\n");
 		else printf("Exit\n");
 
@@ -390,12 +393,12 @@ int printMemberMenuA(int* pNum){
 				}
 				if (letter == 13) {
 						*pNum = position;
-						letter = 27;
+						letter = 13;
 						inputted = 0;
 				}
-		} while(letter != 27 && inputted != 1);
+		} while(letter != 13 && inputted != 1);
 
-	} while(letter != 27);
+	} while(letter != 13);
 	system("cls");
 }
 
@@ -407,18 +410,18 @@ int printMemberMenuM(int* pNum){
 	*pNum = 0;
 	do{		
 		gotoxy(0, 14);
-		printf("%40.0s");
+		printf("%67.0s");
 		printfGreen("MEMBER MENU\n\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 1) printfH("Print list of members\n"); 
 		else printf("Print list of members\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 2) printfH("Search for members\n");
 		else printf("Search for members\n");		
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 3) printfH("Your account\n");
 		else printf("Your account\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 4) printfH("Exit\n");
 		else printf("Exit\n");
 
@@ -443,12 +446,12 @@ int printMemberMenuM(int* pNum){
 				}
 				if (letter == 13) {
 						*pNum = position;
-						letter = 27;
+						letter = 13;
 						inputted = 0;
 				}
-		} while(letter != 27 && inputted != 1);
+		} while(letter != 13 && inputted != 1);
 
-	} while(letter != 27);
+	} while(letter != 13);
 	system("cls");
 }
 
@@ -460,15 +463,15 @@ int printAccSettingMenu(int* pNum){
 	*pNum = 0;
 	do{		
 		gotoxy(0, 14);
-		printf("%40.0s");
+		printf("%67.0s");
 		printfGreen("ACCOUNT SETTING MENU\n\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 1) printfH("Edit your information\n"); 
 		else printf("Edit your information\n");
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 2) printfH("change your password\n");
 		else printf("change your password\n");		
-		printf("%40.0s");
+		printf("%67.0s");
 		if (position == 3) printfH("Exit\n");
 		else printf("Exit\n");
 
@@ -493,11 +496,11 @@ int printAccSettingMenu(int* pNum){
 				}
 				if (letter == 13) {
 						*pNum = position;
-						letter = 27;
+						letter = 13;
 						inputted = 0;
 				}
-		} while(letter != 27 && inputted != 1);
+		} while(letter != 13 && inputted != 1);
 
-	} while(letter != 27);
+	} while(letter != 13);
 	system("cls");
 }

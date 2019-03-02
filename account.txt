@@ -45,7 +45,7 @@ SE140832 832 14 Nam Nguyen Mau Hieu
 SE140830 830 14 Nu Luu Dieu Hoa
 SE140956 956 14 Nu Tran Nguyen Truc Ly
 SE140599 599 14 Nu Truong Truc My
-SE140831 831 14 Nam Nguyen Ke Nam
+SE140831 831 14 Nam Nguyen Ke Nam Nam
 SE140736 736 14 Nu Phong Thanh Nhi
 SE140999 999 14 Nu Nguyen Ngoc Quynh Nhu
 SE140910 910 14 Nu Pham Thanh Phuong

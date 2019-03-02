@@ -16,60 +16,74 @@ void getAcc(char username[], char password[])
 	int posi = 1;
 	int j = 0;
 	int i = 0;
+	
+	system("cls");
+	gotoxy(0,8);
+	printFCode();
+	printf("\n\n\n");
+	printf("%60.0s");
+	printfGreen(":--------------------------------------------------------:\n");
+	printf("%60.0s");
+	printfGreen("|   Enter your username: ");
+	printf("\n");
+	printf("%60.0s");
+	printfGreen("|                                                        |\n");
+	printf("%60.0s");
+	printfGreen("|   Enter your password: ");
+	printf("\n");
+	printf("%60.0s");
+	printfGreen(":--------------------------------------------------------:\n");
+	
+	gotoxy(117, 24);
+	printfGreen("|");
+	gotoxy(117, 25);
+	printfGreen("|");
+	gotoxy(117, 26);
+	printfGreen("|");
+				
 	do
 	{
 	
 		switch(posi)
 		{
 			case 1: 
-				system("cls");
-				gotoxy(0,8);
-				printFCode();
-				printf("\n\n\n");
+				gotoxy(85, 24);
+				printfGreen("                                |");
+				gotoxy(85, 25);
+				printfGreen("                                |");
+				gotoxy(85, 26);
+				printfGreen("                                |");
+				
+				gotoxy(0, 24);
 				printf("%60.0s");
-				printfGreen(":--------------------------------------------------------:\n");
+				printfGreen("|   Enter your username: ");
+				printf("%s_\n", username);
+				printf("%60.0s");
+				printfGreen("|                                                        |\n");
+				printf("%60.0s");
+				printfGreen("|   Enter your password: ");
+				printf("%s\n", star);
+			
+				break;
+				
+			case 2: 
+				gotoxy(85, 24);
+				printfGreen("                                |");
+				gotoxy(85, 25);
+				printfGreen("                                |");
+				gotoxy(85, 26);
+				printfGreen("                                |");
+				
+				gotoxy(0, 24);
 				printf("%60.0s");
 				printfGreen("|   Enter your username: ");
 				printf("%s\n", username);
 				printf("%60.0s");
 				printfGreen("|                                                        |\n");
 				printf("%60.0s");
-				printf("|   Enter your password: ");
-				printf("%s\n", star);
-				printf("%60.0s");
-				printfGreen(":--------------------------------------------------------:\n");
-				
-				gotoxy(117, 24);
-				printfGreen("|");
-				gotoxy(117, 25);
-				printfGreen("|");
-				gotoxy(117, 26);
-				printfGreen("|");
-				break;
-			case 2: 
-				system("cls");
-				gotoxy(0,8);
-				printFCode();
-				printf("\n\n\n");
-				printf("%60.0s");
-				printfGreen(":--------------------------------------------------------:\n");
-				printf("%60.0s");
-				printf("|   Enter your username: ");
-				printf("%s\n", username);
-				printf("%60.0s");
-				printfGreen("|                                                        |\n");
-				printf("%60.0s");
 				printfGreen("|   Enter your password: ");
-				printf("%s\n", star);
-				printf("%60.0s");
-				printfGreen(":--------------------------------------------------------:\n");
+				printf("%s_\n", star);
 				
-				gotoxy(117, 24);
-				printfGreen("|");
-				gotoxy(117, 25);
-				printfGreen("|");
-				gotoxy(117, 26);
-				printfGreen("|");
 				break;
 			}
 			tmp = getch();
