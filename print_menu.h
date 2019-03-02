@@ -9,3 +9,5 @@ int printAnnouncementMenuA(int* pNum);
 int printMemberMenuM(int* pNum);
 int printMemberMenuA(int* pNum);
 int printAccSettingMenu(int* pNum);
+void printfRed(char str[255]);
+

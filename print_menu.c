@@ -18,6 +18,13 @@ void printfGreen(char str[255]){
   	SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
 }
 
+void printfRed(char str[255]){
+	SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x04);
+	printf ("%s", str);
+  	SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
+}
+
+
 int printMainMenu(int* pNum){
 
 	int position = 1;

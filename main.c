@@ -18,6 +18,12 @@ char inputAddress[100] = "D:\\study\\train c\\classProject\\Nam\\member_Event_At
 int numStu;
 char studentCurrentCode[9];
 char decentralization[20];
+
+//four student code for admin 
+	char ad1[9];
+	char ad2[9];
+	char ad3[9];
+	char ad4[9];
 //creat struct
 struct students 
 	{
@@ -105,6 +111,17 @@ void writeFile(FILE* pAcc, int numStu)
 		}
 	}
 	fclose(pAcc);
+}
+
+//function write admin code in file
+void writeRoleFile(FILE* pFileRole)
+{
+	pFileRole = fopen("role.txt", "w");
+	fprintf(pFileRole, "%s\n", ad1);
+	fprintf(pFileRole, "%s\n", ad2);
+	fprintf(pFileRole, "%s\n", ad3);
+	fprintf(pFileRole, "%s\n", ad4);
+	fclose(pFileRole);
 }
 
 void swap(int firstPosi, int secondPosi)
@@ -416,7 +433,7 @@ int checkID(char str[], int numStu, int numAcc)
 }
 
 //function edit single member information
-void editMem(int numStu, int number, FILE* pAcc, int* pNumAcc)
+void editMem(int numStu, int number, FILE* pAcc, int* pNumAcc, char username[], FILE* pFileRole)
 {
 		char temp;
 		char tmp[50];
@@ -565,12 +582,12 @@ void editMem(int numStu, int number, FILE* pAcc, int* pNumAcc)
 										{
 											if(temp == 32 || (temp >= 48 && temp <= 57) || (temp >= 65 && temp <= 90) || (temp >= 97 && temp <= 122))
 											{
-												if(posi == 1 && (temp < 48 || temp > 57))
+												if(posi == 1 && (temp < 48 || temp > 57) && strlen(tmpName) <= 30)
 												{											
 													tmpName[strlen(tmpName) + 1] = '\0';
 													tmpName[strlen(tmpName)] = temp;	
 												}
-												if(posi == 3)
+												if(posi == 3 && strlen(tmpCode) <= 9)
 												{
 													tmpCode[strlen(tmpCode) + 1] = '\0';
 													tmpCode[strlen(tmpCode)] = temp;	
@@ -581,11 +598,11 @@ void editMem(int numStu, int number, FILE* pAcc, int* pNumAcc)
 							
 							if (temp == 8)
 							{
-								if (posi == 1)
+								if (posi == 1 && strlen(tmpName) >= 1)
 								{
 									tmpName[strlen(tmpName) - 1] = '\0';
 								}
-								if (posi == 3)
+								if (posi == 3 && strlen(tmpCode) >= 1)
 								{
 									tmpCode[strlen(tmpCode) - 1] = '\0';
 								}
@@ -616,7 +633,33 @@ void editMem(int numStu, int number, FILE* pAcc, int* pNumAcc)
 										deleteOddSpace(tmpName);	
 										strcpy(student[number - 1].name, tmpName);
 										strcpy(student[number - 1].sex, tmpSex);
+										
+										//check code is of admins or not
+										if(decentralizeStu(student[number - 1].studentCode, ad1, ad2, ad3, ad4) != 0)
+										{
+											if(strcmp(student[number - 1].studentCode, ad1) == 0)
+											{
+												strcpy(ad1, tmpCode);
+											}
+											if(strcmp(student[number - 1].studentCode, ad2) == 0)
+											{
+												strcpy(ad2, tmpCode);
+											}
+											if(strcmp(student[number - 1].studentCode, ad3) == 0)
+											{
+												strcpy(ad3, tmpCode);
+											}
+											if(strcmp(student[number - 1].studentCode, ad4) == 0)
+											{
+												strcpy(ad4, tmpCode);
+											}
+											writeRoleFile(pFileRole);
+										}			
 										strcpy(student[number - 1].studentCode, tmpCode);
+										if(number - 1 == *pNumAcc)
+										{
+											strcpy(username, tmpCode);
+										}
 										student[number - 1].course = getCourse((student[number - 1].studentCode));
 										sortStuList(numStu, pNumAcc);
 										writeFile(pAcc, numStu);
@@ -632,7 +675,7 @@ void editMem(int numStu, int number, FILE* pAcc, int* pNumAcc)
 
 
 //function edit information in table
-void editInTable(int numStu, FILE* pAcc, int* pNumAcc)
+void editInTable(int numStu, FILE* pAcc, int* pNumAcc, char username[], FILE* pFileRole)
 {
 	int number;
 	int startPosi = 0;
@@ -710,7 +753,7 @@ void editInTable(int numStu, FILE* pAcc, int* pNumAcc)
 				number = atoi(tmp);		
 				if (letter == 13 && strlen(tmp) >= 1)
 				{
-					editMem(numStu, number, pAcc, pNumAcc);					
+					editMem(numStu, number, pAcc, pNumAcc, username, pFileRole);					
 				}
 				if (letter == 8 && i > 0)
 				{
@@ -750,138 +793,151 @@ void searchStudent(int numStu)
 	char element[50];
 	while(1)
 	{
-	for (int i = 0; i <= 49; i++)
-	{
-		element[i] = '\0';
-	}
-	int i = 0;
-	do
-	{
-		system("cls");
-			//printf("\n\n\n\n\n\n\n");
-		printf("_______________________________________________________\n");
-		printf("| Enter elements you want to find:  %s\n", element);
-		printf("_______________________________________________________\n");
-		if(strlen(element) > 0)
+		for (int i = 0; i <= 49; i++)
 		{
-			for (int j = 0; j <= numStu - 1; j ++)
-			{
-				if (strstr(student[j].name, element) != '\0')
-				{
-					char name[50];
-					strcpy(name, student[j].name);
-					while (strlen(name) < 40)
-					{
-						strcat(name, " ");
-					}
-					printf("-------------------------------------------\n");
-					printf("| %s|\n", name);
-					printf("-------------------------------------------\n");
-					//printf("%s\n", student[j].name);
-				}else if(strstr(student[j].studentCode, element) != '\0')
-					{
-						//printf("%s\n", student[j].studentCode);
-						char code[9];
-						strcpy(code, student[j].studentCode);
-						while (strlen(code) < 9)
-						{
-							strcat(code, " ");
-						}
-						printf("------------\n");
-						printf("| %s|\n", code);
-						printf("------------\n");	
-									
-					}else if(strstr(student[j].sex, element) != '\0')
-						{
-						
-							printf("%s\n", student[j].sex);
-							break;
-						}else if(checkNum(element))
-						{
-								if(atoi(element) == student[j].course)
-								{
-									printf("%d", student[j].course);
-									break;	
-								}
-						}
-			}
-		}
-	
-		tmp = getch();
-		if(tmp == 32 || (tmp >= 48 && tmp <= 57) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
-		{
-			element[i] = tmp;
-			i++;
-			upperCase(element);	
-		}
-		if (tmp == 8 && i >= 1) 
-		{
-			i--;
 			element[i] = '\0';
 		}
-		
-			
-	}while(tmp != 13 && tmp != 27);
-	if(tmp == 13 && strlen(element) > 0)
-	{
-		int found = 0;
-		int k = 0;
-		system("cls");
-		deleteOddSpace(element);
-		printf(":-------:--------------------------------------------------:------------:------------:-------:\n");
-		printf("|  Ord  |                      Name                        |    Sex     |Student Code| Course|\n");
-		printf("|-------:--------------------------------------------------:------------:------------:-------|\n");
-		for (int j = 0; j <= numStu - 1; j ++)
+		int i = 0;
+		do
 		{
-			if (checkNum(element))
+			system("cls");
+				//printf("\n\n\n\n\n\n\n");
+			printf("_______________________________________________________\n");
+			printf("| Enter elements you want to find:  %s\n", element);
+			printf("_______________________________________________________\n");
+			if(strlen(element) > 0)
 			{
-				if(atoi(element) == student[j].course)
+				int count = 0;
+				int foundSex = 0;
+				int foundCourse = 0;
+				for (int j = 0; j <= numStu - 1; j ++)
 				{
-					k++;
-					printf("|  %d\t", k);
-					printInfo(j);
-					found = 1;
-					
+					if (strstr(student[j].name, element) != '\0')
+					{
+						char name[50];
+						strcpy(name, student[j].name);
+						while (strlen(name) < 40)
+						{
+							strcat(name, " ");
+						}
+						printf("-------------------------------------------\n");
+						printf("| %s|\n", name);
+						printf("-------------------------------------------\n");
+						count++;
+						if(count == 8) break;
+						//printf("%s\n", student[j].name);
+					}else if(strstr(student[j].studentCode, element) != '\0')
+						{
+							//printf("%s\n", student[j].studentCode);
+							char code[9];
+							strcpy(code, student[j].studentCode);
+							while (strlen(code) < 9)
+							{
+								strcat(code, " ");
+							}
+							printf("------------\n");
+							printf("| %s|\n", code);
+							printf("------------\n");
+							count++;
+							if(count == 8) break;	
+										
+						}else if(strstr(student[j].sex, element) != '\0' && !foundSex)
+							{
+								printf("---------\n");
+								printf("|  %s\t|\n", student[j].sex);
+								printf("---------\n");
+								count++;
+								foundSex = 1;
+								if(count == 8) break;
+							}else if(checkNum(element))
+								{
+									if(atoi(element) == student[j].course && !foundCourse)
+									{
+										printf("%d", student[j].course);
+										count++;
+										foundCourse = 1;
+										if(count == 8) break;
+										//break;	
+									}
+								}
 				}
+			}
+		
+			tmp = getch();
+			if(tmp == 32 || (tmp >= 48 && tmp <= 57) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
+			{
+				element[i] = tmp;
+				i++;
+				upperCase(element);	
+			}
+			if (tmp == 8 && i >= 1) 
+			{
+				i--;
+				element[i] = '\0';
+			}
 			
-			}else if(strstr(student[j].studentCode, element) != '\0')
+				
+		}while(tmp != 13 && tmp != 27);
+		if(tmp == 13 && strlen(element) > 0)
+		{
+			int found = 0;
+			int k = 0;
+			system("cls");
+			deleteOddSpace(element);
+			printf(":-------:--------------------------------------------------:------------:------------:-------:\n");
+			printf("|  Ord  |                      Name                        |    Sex     |Student Code| Course|\n");
+			printf("|-------:--------------------------------------------------:------------:------------:-------|\n");
+			for (int j = 0; j <= numStu - 1; j ++)
+			{
+				if (checkNum(element))
 				{
+					if(atoi(element) == student[j].course)
+					{
 						k++;
 						printf("|  %d\t", k);
 						printInfo(j);
-						found = 1;				
-				}else if(strstr(student[j].sex, element) != '\0')
-					{		
+						found = 1;
+						
+					}
+				
+				}else if(strstr(student[j].studentCode, element) != '\0')
+					{
 							k++;
-							printf("|  %d\t", k);			
+							printf("|  %d\t", k);
 							printInfo(j);
-							found = 1;
-					}else if(strstr(student[j].name, element) != '\0')
-						{	
-							if(strstr(student[j].name, element) != '\0')
-							{
+							found = 1;				
+					}else if(strstr(student[j].sex, element) != '\0')
+						{		
 								k++;
-								printf("|  %d\t", k);
+								printf("|  %d\t", k);			
 								printInfo(j);
 								found = 1;
+						}else if(strstr(student[j].name, element) != '\0')
+							{	
+								if(strstr(student[j].name, element) != '\0')
+								{
+									k++;
+									printf("|  %d\t", k);
+									printInfo(j);
+									found = 1;
+								}
 							}
-						}
+			}
+			if(!found)
+			{
+				system("cls");
+				printf("\n\n\n\n\n\n");
+				printf("\t\t\t\t\t!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+				printf("\t\t\t\t\t!      Can't find out information!     !\n");
+				printf("\t\t\t\t\t!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+				getchar();		
+			}else
+			{
+				printf(":-------:--------------------------------------------------:------------:------------:-------:\n");				
+				tmp = getch();
+			}
 		}
-		if(!found)
-		{
-			system("cls");
-			printf("\n\n\n\n\n\n");
-			printf("\t\t\t\t\t!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-			printf("\t\t\t\t\t!      Can't find out information!     !\n");
-			printf("\t\t\t\t\t!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-			getchar();		
-		}else
-		{
-			printf(":-------:--------------------------------------------------:------------:------------:-------:\n");				
-			tmp = getch();
-		}
-	}
-	if(tmp == 27) break;
+		if(tmp == 27) break;
 	}
 	system("cls");
 }
@@ -894,182 +950,186 @@ void InsertMem(FILE* pAcc, int* pNumStu, int* pNumAcc)
 	char tmpName[50];
 	char tmpCode[10];
 	char tmpSex[4];
+	strcpy(tmpSex, "Nu");
+	int i = 0;
+	for(int j = 0; j <= 49; j++)
+	{
+		tmpName[j] = '\0';
+	}
+	for(int j = 0; j <= 9; j++)
+	{
+		tmpCode[j] = '\0';
+	}
+	int posi = 1;
+	int again = 1;
+	int j = 0;
 	do
 	{
-		int i = 0;
-		for(int j = 0; j <= 49; j++)
-		{
-			tmpName[j] = '\0';
-		}
-		for(int j = 0; j <= 9; j++)
-		{
-			tmpCode[j] = '\0';
-		}
 		do
 		{
-			system("cls");
-			printf("\n\n\n\n\n\n\n");
-			printf("\t\t\t\t\t______________________________________\n");
-			printf("\t\t\t\t\t| Enter name: ");
-			printf("%s\n", tmpName);
-			printf("\t\t\t\t\t______________________________________\n");
-			printf("\t\t\t\t\t| Enter student code:\n");
-			printf("\t\t\t\t\t______________________________________\n");
-			printf("\t\t\t\t\t| Student's sex:  Nu ^|v\n");
-			printf("\t\t\t\t\t______________________________________\n");
-			tmp = getch();
-			if ((tmp == 32) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
+			switch(posi)
 			{
-				tmpName[i] = tmp;
-				i++;
-			}
-			if(tmp == 8 && i >= 1)
-			{
-				i--;
-				tmpName[i] = '\0';
-			}
-		} while (tmp != 13 && tmp != 27);
-		if(tmp == 27) break;
-		deleteOddSpace(tmpName);
-		upperCase(tmpName);
-		
-			i = 0;
-			int again = 0;
-			do
-			{
-				do
-				{ 
+				case 1:
 					system("cls");
 					printf("\n\n\n\n\n\n\n");
-					printf("\t\t\t\t\t______________________________________\n");	
+					printf("\t\t\t\t\t______________________________________\n");
+					printf("\t\t\t\t\t|");
+					printfGreen(" Enter name: ");
+					printf("%s\n", tmpName);
+					printf("\t\t\t\t\t______________________________________\n");
+					printf("\t\t\t\t\t| Enter student code: %s\n", tmpCode);
+					printf("\t\t\t\t\t______________________________________\n");
+					printf("\t\t\t\t\t| Student's sex:  %s <|>\n", tmpSex);
+					printf("\t\t\t\t\t______________________________________\n");
+					break;
+				case 2:
+					system("cls");
+					printf("\n\n\n\n\n\n\n");
+					printf("\t\t\t\t\t______________________________________\n");
 					printf("\t\t\t\t\t| Enter name: %s\n", tmpName);
 					printf("\t\t\t\t\t______________________________________\n");
-					if(again)
-					{
-						if(checkID(tmpCode, *pNumStu, *pNumStu) == 0)
-						{
-							printf("\n\t\t\t\t\tThe student code is not valid!");
-							printf("\n\t\t\t\t\t| Enter student code: \n");
-							printf("\t\t\t\t\t______________________________________\n");
-
-						}else
-						{
-							printf("\n\t\t\t\t\tThis student code have been in club already!");
-							printf("\n\t\t\t\t\t| Enter student code: \n");
-							printf("\t\t\t\t\t______________________________________\n");
-						}
-						
-						for(int j = 0; j <= i - 1; j++)
-						{
-							tmpCode[j] = '\0';	
-						}
-						i = 0;
-						again = 0;
-					}else
-						{
-							printf("\t\t\t\t\t| Enter student Code: %s\n", tmpCode);
-							printf("\t\t\t\t\t______________________________________\n");
-						}
-					
-				//	printf("%s\n", tmpCode);
-					printf("\t\t\t\t\t| Student's sex:  Nu ^|v\n");
+					printf("\t\t\t\t\t| ");
+					printfGreen("Enter student code: ");
+					printf("%s\n", tmpCode);
 					printf("\t\t\t\t\t______________________________________\n");
-					
-					tmp = getch();
-					if ((tmp >= 65 && tmp <= 90) || (tmp >= 48 && tmp <= 57))
-					{
-						tmpCode[i] = tmp;
-						i++;
-					}
-					if(tmp == 8 && i >= 1)
-					{
-						i--;
-						tmpCode[i] = '\0';
-					}
-				} while (tmp != 13 && tmp != 27);
-				
-			if(tmp == 27) break;
-			again = 0;
-			if((checkID(tmpCode, *pNumStu, *pNumStu) == 0) || (checkID(tmpCode, *pNumStu, *pNumStu) == 2) == 1)
-			{
-				again = 1;		
+					printf("\t\t\t\t\t| Student's sex:  %s <|>\n", tmpSex);
+					printf("\t\t\t\t\t______________________________________\n");	
+					break;
+				case 3:
+					system("cls");
+					printf("\n\n\n\n\n\n\n");
+					printf("\t\t\t\t\t______________________________________\n");
+					printf("\t\t\t\t\t| Enter name: ");
+					printf("%s\n", tmpName);
+					printf("\t\t\t\t\t______________________________________\n");
+					printf("\t\t\t\t\t| Enter student code: %s\n", tmpCode);
+					printf("\t\t\t\t\t______________________________________\n");
+					printf("\t\t\t\t\t| Student's sex:  %s ", tmpSex);
+					printfGreen("<|>");
+					printf("\n\t\t\t\t\t______________________________________\n");	
+					break;
 			}
-					
-		} while ((checkID(tmpCode, *pNumStu, *pNumStu) == 0) || (checkID(tmpCode, *pNumStu, *pNumStu) == 2));
-		if(tmp == 27) break;
-
-		strcpy(tmpSex, "Nu");
-		do
-		{
-			system("cls");
-			printf("\n\n\n\n\n\n\n");
-			printf("\t\t\t\t\t______________________________________\n");
-			printf("\t\t\t\t\t| Enter name: ");
-			printf("%s\n", tmpName);
-			printf("\t\t\t\t\t______________________________________\n");
-			printf("\t\t\t\t\t| Enter student code: %s\n", tmpCode);
-			printf("\t\t\t\t\t______________________________________\n");
-			printf("\t\t\t\t\t| Student's sex:  %s ^|v\n", tmpSex);
-			printf("\t\t\t\t\t______________________________________\n");
 			tmp = getch();
-			
-			if(tmp == - 32 || tmp == 80 || tmp == 72)
+			if (tmp == -32)
 			{
-				if(tmp == 80 || tmp == 72)
-				if (strcmp(tmpSex, "Nu") == 0)
+				tmp = getch();
+				if(tmp == 80 && posi < 3)
 				{
-					strcpy(tmpSex, "Nam");
-				}else strcpy(tmpSex, "Nu");
+					posi++;	
+				} 
+				if(tmp == 72 && posi > 1)
+				{
+					posi--;
+				}
+				
+				if((tmp == 77 || tmp == 75) && posi == 3)
+					if (strcmp(tmpSex, "Nu") == 0)
+					{
+						strcpy(tmpSex, "Nam");
+					}else strcpy(tmpSex, "Nu");
+			}else
+				{
+					if((tmp >= 48 && tmp <= 57) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
+					{
+						if(posi == 1)
+						{
+							tmpName[i] = tmp;
+							i++;	
+						}
+						if(posi == 2)
+						{
+							tmpCode[j] = tmp;
+							j++;
+						}
+					}
+				}
+				
+			if(tmp == 8)
+			{
+				if(posi == 1 && i > 0)
+				{
+					i--;
+					tmpName[i] = '\0';
+				}
+				
+				if(posi == 2 && j > 1)
+				{
+						j--;
+						tmpCode[j] = '\0';
+				}	
 			}
-		} while(tmp != 13 && tmp != 27);
+				if(tmp == 27) break;	
+		} while((tmp != 13 && tmp != 27) || i == 0 || j == 0);
 		
-	
-	}while (tmp != 27 && tmp != 13);
-	//them cai dk neus maf enter thif moiws copy voiws viet vo tep
-	
-	if(tmp == 13)
-	{
-		strcpy(student[*pNumStu].name, tmpName);
-		strcpy(student[*pNumStu].studentCode, tmpCode);
-		strcpy(student[*pNumStu].sex, tmpSex);
-		
-	student[*pNumStu].course = getCourse(student[*pNumStu].studentCode);
-	
-		int j = 0;
-		for (int i = 5; i <= strlen(student[*pNumStu].studentCode) - 1; i++)
+		if(tmp == 27) break;
+		if(tmp == 13)
 		{
-			student[*pNumStu].pass[j] = student[*pNumStu].studentCode[i];
-			j++;
+			if(checkID(tmpCode, *pNumStu, *pNumStu) == 0)
+			{
+				system("cls");
+				printf("\n\n\n\n\n\n\n");
+				printf("\t\t\t\t\t!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+				printf("\t\t\t\t\t!  The student code is invalid!   !\n");
+				printf("\t\t\t\t\t!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+				getchar();
+			}else if(checkID(tmpCode, *pNumStu, *pNumStu) == 2)
+				{
+				system("cls");
+				printf("\n\n\n\n\n\n\n");
+				printf("\t\t\t\t\t!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+				printf("\t\t\t\t\t!  This student code has existed! !\n");
+				printf("\t\t\t\t\t!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+				getchar();
+				}else
+					{
+						again = 0;
+						strcpy(student[*pNumStu].name, tmpName);
+						strcpy(student[*pNumStu].studentCode, tmpCode);
+						strcpy(student[*pNumStu].sex, tmpSex);
+			
+						student[*pNumStu].course = getCourse(student[*pNumStu].studentCode);
+		
+						int j = 0;
+						for (int i = 5; i <= strlen(student[*pNumStu].studentCode) - 1; i++)
+						{
+						student[*pNumStu].pass[j] = student[*pNumStu].studentCode[i];
+						j++;
+					}
+					system("cls");
+					printf("\n\n\n\n\n\n\n\n");
+					printf("\t\t\t\t\t****************************************\n");
+					printf("\t\t\t\t\t*      Add a member successfully!      *\n");
+					printf("\t\t\t\t\t****************************************\n");
+					getchar();
+					(*pNumStu)++;
+					sortStuList(*pNumStu, pNumAcc);
+		
+					writeFile(pAcc, *pNumStu);
 		}
-		system("cls");
-		printf("\n\n\n\n\n\n\n\n");
-		printf("\t\t\t\t\t****************************************\n");
-		printf("\t\t\t\t\t*      Add a member successfully!      *\n");
-		printf("\t\t\t\t\t****************************************\n");
-		getchar();
-	(*pNumStu)++;
-	sortStuList(*pNumStu, pNumAcc);
+
 	
-	writeFile(pAcc, *pNumStu);
-	}
+		}
+	}while(again);
 	system("cls");
 		
 }
 
 //function change password
-void changePass(int numAcc)
+void changePass(int numAcc, char password[], FILE* pAcc, int numStu)
 {
 	int change = 0;
+	int posi = 1;
 	char starOld[10];
 	char starFirstPass[10];
 	char starSecondPass[10];
 	char oldPass[10];
 	char firstPass[10];
 	char secondPass[10];
+	int i = 0;
+	int j = 0;
+	int k = 0;
 
 	char tmp;
-	do
-		{
 		for(int i = 0; i<= 9; i++)
 		{
 			starOld[i] = '\0';
@@ -1079,121 +1139,128 @@ void changePass(int numAcc)
 			firstPass[i] = '\0';
 			secondPass[i] = '\0';
 		}
+	do
+		{
+	
+	
 		do
 		{
-			system("cls");
-			printf("\n\n\n\n\n\n");
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter your old password: %s\n", starOld);
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter new password: %s\n", starFirstPass);
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter new password again: %s\n", starSecondPass);
-				printf("\t\t\t\t\t______________________________________________\n");
-			int i = 0;
-			do
+			switch(posi)
 			{
-				system("cls");
-				printf("\n\n\n\n\n\n");
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter your old password: %s\n", starOld);
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter new password: %s\n", starFirstPass);
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter new password again: %s\n", starSecondPass);
-				printf("\t\t\t\t\t______________________________________________\n");
-				tmp = getch();
-				if((tmp >= 48 && tmp <= 57) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
-				{
-					starOld[i] = '*';
-					oldPass[i] = tmp;
-					i++;
-				}
-			
-				if(tmp == 8)
-				{
-					i--;
-					starOld[i] = '\0';
-					oldPass[i] = '\0';
-				}
-					
-			}while (tmp != 27 && tmp != 13);
-	
-			if (tmp == 27) break;
-		
-			i = 0;
-			do
-			{
-				system("cls");
-				printf("\n\n\n\n\n\n");
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter your old password: %s\n", starOld);
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter new password: %s\n", starFirstPass);
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter new password again: %s\n", starSecondPass);
-				printf("\t\t\t\t\t______________________________________________\n");
-				tmp = getch();
-				if((tmp >= 48 && tmp <= 57) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
-				{
-					starFirstPass[i] = '*';
-					firstPass[i] = tmp;
-					i++;
-				}
-			
-				if(tmp == 8 && i >= 1)
-				{
-					i--;
-					starFirstPass[i] = '\0';
-					firstPass[i] = '\0';
-				}
-					
-			}while (tmp != 27 && tmp != 13);
-	
-			if (tmp == 27) break;	
-		
-			i = 0;
-			do
-			{
-				system("cls");
-				printf("\n\n\n\n\n\n");
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter your old password: %s\n", starOld);
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter new password: %s\n", starFirstPass);
-				printf("\t\t\t\t\t______________________________________________\n");
-				printf("\t\t\t\t\t| Enter new password again: %s\n", starSecondPass);
-				printf("\t\t\t\t\t______________________________________________\n");
+				case 1:
+					system("cls");
+					printf("\n\n\n\n\n\n");
+					printf("\t\t\t\t\t______________________________________________\n");
+					printf("\t\t\t\t\t|");
+					printfGreen("Enter your old password: ");
+					printf("%s\n", starOld);
+					printf("\t\t\t\t\t______________________________________________\n");
+					printf("\t\t\t\t\t| Enter new password: %s\n", starFirstPass);
+					printf("\t\t\t\t\t______________________________________________\n");
+					printf("\t\t\t\t\t| Enter new password again: %s\n", starSecondPass);
+					printf("\t\t\t\t\t______________________________________________\n");	
+					break;
 				
+				case 2:
+					system("cls");
+					printf("\n\n\n\n\n\n");
+					printf("\t\t\t\t\t______________________________________________\n");
+					printf("\t\t\t\t\t| Enter your old password: %s\n", starOld);
+					printf("\t\t\t\t\t______________________________________________\n");
+					printf("\t\t\t\t\t| ");
+					printfGreen("Enter new password: ");
+					printf("%s\n", starFirstPass);
+					printf("\t\t\t\t\t______________________________________________\n");
+					printf("\t\t\t\t\t| Enter new password again: %s\n", starSecondPass);
+					printf("\t\t\t\t\t______________________________________________\n");
+					break;
+				case 3:
+					system("cls");
+					printf("\n\n\n\n\n\n");
+					printf("\t\t\t\t\t______________________________________________\n");
+					printf("\t\t\t\t\t| Enter your old password: %s\n", starOld);
+					printf("\t\t\t\t\t______________________________________________\n");
+					printf("\t\t\t\t\t| Enter new password: %s\n", starFirstPass);
+					printf("\t\t\t\t\t______________________________________________\n");
+					printf("\t\t\t\t\t| ");
+					printfGreen("Enter new password again: ");
+					printf("%s\n", starSecondPass);
+					printf("\t\t\t\t\t______________________________________________\n");
+					break;					
+			}
+			tmp = getch();
+			if(tmp == - 32)
+			{
 				tmp = getch();
-				if((tmp >= 48 && tmp <= 57) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
+				if(tmp == 80 && posi < 3)
 				{
-					starSecondPass[i] = '*';
-					secondPass[i] = tmp;
-					i++;
+					posi++;
+				}
+				if(tmp == 72 && posi > 1)
+				{
+					posi--;
+				}
+			}else
+				{
+					if((tmp >= 48 && tmp <= 57) || (tmp >= 65 && tmp <= 90) || (tmp >= 97 && tmp <= 122))
+					{
+						if(posi == 1)
+						{
+							starOld[i] = '*';
+							oldPass[i] = tmp;
+							i++;
+						}
+						if(posi == 2)
+						{
+							starFirstPass[j] = '*';
+							firstPass[j] = tmp;
+							j++;	
+						}
+						if(posi == 3)
+						{
+							starSecondPass[k] = '*';
+							secondPass[k] = tmp;
+							k++;	
+						}
+					}
+					
+					if(tmp == 8)
+					{
+						if(posi == 1 && i >= 1)
+						{
+							i--;
+							starOld[i] = '\0';
+							oldPass[i] = '\0';	
+						}
+						if(posi == 2 && j >= 1)
+						{
+							j--;
+							starFirstPass[j] = '\0';
+							firstPass[j] = '\0';	
+						}
+						if(posi == 3 && k >= 1)
+						{
+							k--;
+							starSecondPass[k] = '\0';
+							secondPass[k] = '\0';
+						}
+					}
 				}
 			
-				if(tmp == 8 && i >= 1)
-				{
-					i--;
-					starSecondPass[i] = '\0';
-					secondPass[i] = '\0';
-				}
+
+			if(tmp == 27) break;
 			
-			
-			}while (tmp != 27 && tmp != 13);
-	
-			if (tmp == 27) break;
-			
-		}while (tmp != 13);
+	}while (tmp != 13 );
 	
 		if(tmp == 13)
 		{
 			if(strcmp(oldPass, student[numAcc].pass) == 0)
 			{
-				if(strcmp(firstPass, secondPass) == 0)
+				if(strcmp(firstPass, secondPass) == 0 && i != 0 && j != 0 && k != 0)
 				{
 					strcpy(student[numAcc].pass, firstPass);
+					strcpy(password, student[numAcc].pass);
+					writeFile(pAcc, numStu);
 					system("cls");
 					printf("\n\n\n\n\n\n\n");
 					printf("\t\t\t\t\t\t****************************************\n");
@@ -1223,7 +1290,7 @@ void changePass(int numAcc)
 		
 		}
 		
-		if(tmp == 27) 
+	if(tmp == 27) 
 		{
 			system("cls");
 			break;
@@ -1234,11 +1301,11 @@ void changePass(int numAcc)
 
 
 //function cotrol account
-void controlAcc(FILE* pAcc, int numStu, int* pNumAcc)
+void controlAcc(FILE* pAcc, int numStu, int* pNumAcc, char password[], char username[], FILE* pFileRole)
 {
 	printInfo(*pNumAcc);
 	int choice;
-	char password[20];
+	//char password[20];
 	do
 	{
 		system("cls");
@@ -1256,24 +1323,24 @@ void controlAcc(FILE* pAcc, int numStu, int* pNumAcc)
 		{
 			case 1:
 			//	editInfo(numAcc, pAcc, numStu);
-				editMem(numStu, *pNumAcc + 1, pAcc, pNumAcc);
+				editMem(numStu, *pNumAcc + 1, pAcc, pNumAcc, username, pFileRole);
 				printInfo(*pNumAcc);
 				break;
 			case 2:
-				changePass(*pNumAcc);
+				changePass(*pNumAcc, password, pAcc, numStu);
 				break;
 		}
 	}while (choice != 3);
 	system("cls");
 }
 
-void member(int* pNumStu, char username[], FILE* pAcc, int* pNumAcc)
+void member(int* pNumStu, char username[], FILE* pAcc, int* pNumAcc, char password[], FILE* pFileRole)
 {
 	system("cls");
 	int posi;// position is deleted;
 	
 	int choice;
-	if(decentralizeStu(username) == 1)
+	if(decentralizeStu(username, ad1, ad2, ad3, ad4) == 1)
 	{
 		do
 		{
@@ -1303,10 +1370,10 @@ void member(int* pNumStu, char username[], FILE* pAcc, int* pNumAcc)
 					deleteInTable(*pNumStu, pAcc);
 					break;
 				case 5:
-					editInTable(*pNumStu, pAcc, pNumAcc);
+					editInTable(*pNumStu, pAcc, pNumAcc, username, pFileRole);
 					break;
 				case 6:
-					controlAcc(pAcc, *pNumStu, pNumAcc);
+					controlAcc(pAcc, *pNumStu, pNumAcc, password, username, pFileRole);
 					break;
 				case 7:
 					break;									
@@ -1339,7 +1406,7 @@ void member(int* pNumStu, char username[], FILE* pAcc, int* pNumAcc)
 							searchStudent(*pNumStu);
 							break;
 						case 3:
-							controlAcc(pAcc, *pNumStu, pNumAcc);	
+							controlAcc(pAcc, *pNumStu, pNumAcc, password, username, pFileRole);	
 							break;
 					}
 				} while(choice != 4);
@@ -2375,29 +2442,39 @@ void writeEAL(FILE* pFile){
  int main(int argc, char *argv[]) {
 	
 	char username[9];
-	char password[20];
+	char password[10];
 	char letter;
 	int chooseNumber;
 	int numAcc;
-	
-//	hidecursor();
+
+	hidecursor();
 	
 	do{		
 		fflush(stdin);
-		getUsername(username);
-		getPassword(password, username);
+//		getUsername(username);
+//		getPassword(password, username);
+		getAcc(username, password);
 			
 		FILE* pFileStu;
 		pFileStu = fopen("account.txt", "r");
 		getInfo(pFileStu, &numStu);
 		
+		//read the role 
+		FILE* pFileRole;
+		pFileRole = fopen("role.txt", "r");
+		fscanf(pFileRole, "%s", ad1);
+		fscanf(pFileRole, "%s", ad2); 
+		fscanf(pFileRole, "%s", ad3);
+		fscanf(pFileRole, "%s", ad4);
+		fclose(pFileRole);
+		
 		if(checkAcc(numStu, username, password, &numAcc)){
 			
 			strcat(studentCurrentCode, username);
 						
-			if (decentralizeStu(studentCurrentCode) == 1) {
+			if (decentralizeStu(studentCurrentCode, ad1, ad2, ad3, ad4) == 1) {
 				strcpy(decentralization, "Administator");
-			} else if (decentralizeStu(studentCurrentCode) == 2) {
+			} else if (decentralizeStu(studentCurrentCode, ad1, ad2, ad3, ad4) == 2) {
 				strcpy(decentralization, "Fund Manager");
 			} else strcpy(decentralization, "Club member");
 			
@@ -2417,7 +2494,7 @@ void writeEAL(FILE* pFile){
 					
 					case 1:{
 //						printTable(numStu);
-						member(&numStu, username, pFileStu, &numAcc);
+						member(&numStu, username, pFileStu, &numAcc, password, pFileRole);
 						break;
 					}
 					
@@ -2427,7 +2504,7 @@ void writeEAL(FILE* pFile){
 						pFileEvent = fopen("event.txt", "r");
 						int numEvent;
 						
-						if(decentralizeStu(studentCurrentCode) == 1) 
+						if(decentralizeStu(studentCurrentCode, ad1, ad2, ad3, ad4) == 1) 
 							eventMenuAdmin(pFileEvent, &numEvent);
 						else
 							eventMenuM(pFileEvent, &numEvent);
@@ -2448,7 +2525,7 @@ void writeEAL(FILE* pFile){
 						
 						//announcement
 						
-						if(decentralizeStu(studentCurrentCode) == 1) 
+						if(decentralizeStu(studentCurrentCode, ad1, ad2, ad3, ad4) == 1) 
 							announcementA();
 						else
 							announcementM();
@@ -2462,8 +2539,23 @@ void writeEAL(FILE* pFile){
 				}
 			 		
 			}while (chooseNumber != 5);
-		}else {printf("Account does not exist!\n");		
+		}else
+		{
+		//	printf("Account does not exist!\n");
+			system("cls");
+				printf("\n\n\n\n\n\n\n");
+				printf("\t\t\t\t\t");
+				printfRed("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				printf("\n");
+				printf("\t\t\t\t\t");
+				printfRed("!   The account does not exist!   !");
+				printf("\n");
+				printf("\t\t\t\t\t");
+				printfRed("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				printf("\n");
+				getchar();		
 		}
+		fclose(pFileRole);
 	}while (!checkAcc(numStu, username, password, &numAcc));
 	return(0);
 }
